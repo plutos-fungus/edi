@@ -1,4 +1,4 @@
-# TODO 
+# TODO
 - Add UTF-8 support, both in text buffer and saving
 - Streamline saving, so it's possible to save apostrophes properly
 - ~~Fix out of bounds errors~~ (temp solution)
