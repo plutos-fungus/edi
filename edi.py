@@ -1,22 +1,54 @@
 import os
-import curses
-from curses import wrapper
+import sys # for argument handling
+import curses # ncurses
+import re
+from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
+
+global filename
+filename = ""
+global liststr
+liststr = []
 
 def main (stdscr):
-    stdscr.leaveok(False) # gør sådan at cursor koordinaterne faktisk er korrekte
+    stdscr.leaveok(False) # Make it so the cursor coordinates are correct
+#============================Argument handling ============================#
+    arguments = sys.argv
+    if len(arguments) > 2: # Checks if there are more than one argument. If there is, an error is given.
+        exit("Error: Too many arguments")
+    elif len(arguments) == 2: # If one argument is given, open the file that is given as an argument
+        filename = arguments[1]
+        f = open(filename)
+        contents = f.readlines()
+        f.close()
+        for i in contents:
+            stdscr.addstr(i)
 
 #==================================== Functions ====================================#
     def save_close():
-        contents = stdscr.instr(0,0) # kopier skærmens tekstindhold til en række bytes
-        # instr virker ikke rigtig til mere end en linje og er ret upraktisk
+        contents = []
+        for y in range (stdscr.getmaxyx()[0]):
+            contents.append(str(stdscr.instr(y,0)))
+        # instr doesn't really work for more than one line and is quite impractical
         stdscr.clear()
         stdscr.refresh()
         filename = "testing"
         create = open(filename, "w")
         create.close()
         save = open(filename, "a")
-        save.write(str(contents)) # konverter rækken af bytes til en string og gem den
+        for s in contents:
+            news = re.sub("\s{10,}", "", s)
+            s = re.sub("\'b\'", "\n", news)
+            save.write(news)
+        #for y in range (stdscr.getmaxyx()[1]):
+
         save.close()
+        #hej = str(contents)
+        #liststr.append(hej)
+        #for i in liststr:
+            #save.write(i)
+            #save.close()
+        #save.write(str(contents)) # Convert the row of bytes to a string and save it //TODO converte to a list of characters pr. row
+        #save.close()
         exit()
 
     def delete(): # Doesn't work with the default GNOME terminal
@@ -47,8 +79,8 @@ def main (stdscr):
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
-        stdscr.refresh() # refresh skærmen, sådan at de kommandoer, som sendes til stdscr, rent faktisk udføres
-        cursorlist = list(curses.getsyx()) # får nuværende cursor posytion, y først, x sidst
+        stdscr.refresh() # Refresh the screen, so the commands that are being send to stdscr actually gets executed
+        cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
         cursorx = cursorlist[1]
         cursory = cursorlist[0]
         input = stdscr.getkey()
@@ -57,7 +89,7 @@ def main (stdscr):
         if input == "KEY_F(1)": # exit without saving
             exit()
 
-        if input == "KEY_F(2)": # gem fil med indhold til en fil ved navn testing. TODO: input filnavn
+        if input == "KEY_F(2)": # Saves the file with the content to a file named "testing". //TODO: input filename
             save_close()
 
         elif input == "KEY_BACKSPACE": # Doesn't work with the default GNOME terminal
@@ -77,6 +109,6 @@ def main (stdscr):
             down()
 
         else:
-            stdscr.addstr(input) # tilføj input til skærmen
+            stdscr.addstr(input) # Add input to the screen
 
 wrapper(main)
