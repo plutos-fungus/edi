@@ -8,3 +8,4 @@
 - Read config file for color?
 - Fix program lock-up after a random amout of ctrl-key and any character combination
 - Delete past the current line
+- Remove options to ungracefully exit (such as ctrl+c)
