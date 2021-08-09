@@ -3,11 +3,10 @@ import sys # for argument handling
 import curses # ncurses
 import re
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
-
-global filename
 filename = ""
 
 def main (stdscr):
+    global filename
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct
 
 #============================Argument handling ============================#
@@ -24,6 +23,7 @@ def main (stdscr):
 
 #==================================== Functions ====================================#
     def save_close():
+        global filename
         contents = []
         newcontents = [] # Stores new contents list after RegEx
         for y in range (stdscr.getmaxyx()[0]):
@@ -31,7 +31,25 @@ def main (stdscr):
         # instr doesn't really work for more than one line and is quite impractical
         stdscr.clear()
         stdscr.refresh()
-        filename = "testing"
+        curses.endwin()
+        if filename == "": # Ask about the name of the file if the file isn't one that has been opened
+            nameFound = False
+            while not nameFound:
+                print("Which file name/path do you want?")
+                tempfilename = input("")
+                print("Are you sure? (y/n)")
+                answer = input("")
+                validAnswer = False
+                while not validAnswer:
+                    if answer == "y" or "Y":
+                        filename = tempfilename
+                        nameFound = True
+                        validAnswer = True
+                    elif answer == "n" or "N":
+                        validAnswer = True
+                    else:
+                        print("Invalid answer. Try again")
+
         create = open(filename, "w")
         create.close()
         save = open(filename, "a")
@@ -58,7 +76,7 @@ def main (stdscr):
 
         save.close()
         exit()
-
+    # TODO:
     def delete(): # Doesn't work with the default GNOME terminal
         if cursorx != 0: # preventing crash
             stdscr.delch(cursory, cursorx - 1) # Delete the character that is one to the
@@ -71,7 +89,7 @@ def main (stdscr):
             newx = cursorx
         stdscr.move(cursory, newx)
 
-    def right():
+    def right(): # TODO: OOB avoidance
         newx = cursorx + 1
         stdscr.move(cursory, newx)
 
@@ -82,7 +100,7 @@ def main (stdscr):
             newy = cursory
         stdscr.move(newy, cursorx)
 
-    def down():
+    def down(): # TODO: OOB avoidance
         newy = cursory + 1
         stdscr.move(newy, cursorx)
 
@@ -93,34 +111,33 @@ def main (stdscr):
         cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
         cursorx = cursorlist[1]
         cursory = cursorlist[0]
-        input = stdscr.getkey()
+        key = stdscr.getkey()
 
 #==================================== Function keys ====================================#
-        if input == "KEY_F(1)": # exit without saving
+        if key == "KEY_F(1)": # exit without saving
             exit()
 
-        if input == "KEY_F(2)": # Saves the file with the content to a file named "testing".
-        # //TODO input filename
+        if key == "KEY_F(2)": # Saves the file with the content to a file named "testing".
             save_close()
 
-        elif input == "KEY_BACKSPACE": # Doesn't work with the default GNOME terminal //TODO make
+        elif key == "KEY_BACKSPACE": # Doesn't work with the default GNOME terminal //TODO make
         # it universal
             delete()
 
 #==================================== Cursor keys ====================================#
-        elif input == "KEY_LEFT":
+        elif key == "KEY_LEFT":
             left()
 
-        elif input == "KEY_RIGHT":
+        elif key == "KEY_RIGHT":
             right()
 
-        elif input == "KEY_UP":
+        elif key == "KEY_UP":
             up()
 
-        elif input == "KEY_DOWN":
+        elif key == "KEY_DOWN":
             down()
 
         else:
-            stdscr.addstr(input) # Add input to the screen
+            stdscr.addstr(key) # Add input to the screen
 
 wrapper(main)
