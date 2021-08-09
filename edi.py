@@ -4,22 +4,28 @@ import curses # ncurses
 import re # RegEx
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
 filename = ""
+files = os.listdir()
 
 def main (stdscr):
+    global files
     global filename
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct/generally work
 
-#============================Argument handling ============================#
+#============================ Argument handling ============================#
     arguments = sys.argv
     if len(arguments) > 2: # Checks if there are more than one argument. If there is, an error is given.
         exit("Error: Too many arguments")
     elif len(arguments) == 2: # If one argument is given, open the file that is given as an argument
         filename = arguments[1]
-        f = open(filename)
-        contents = f.readlines()
-        f.close()
-        for i in contents:
-            stdscr.addstr(i)
+        if filename in files:
+            f = open(filename)
+            contents = f.readlines()
+            f.close()
+            for i in contents:
+                stdscr.addstr(i)
+        else:
+            create = open(filename, "w")
+            create.close()
 
 #==================================== Functions ====================================#
     def save_close():
@@ -41,11 +47,12 @@ def main (stdscr):
                 answer = input("")
                 validAnswer = False
                 while not validAnswer:
-                    if answer == "y" or "Y":
+                    if answer == "y" or answer == "Y":
                         filename = tempfilename
                         nameFound = True
                         validAnswer = True
-                    elif answer == "n" or "N":
+                    elif answer == "n" or answer == "N":
+                        print("Enter another name")
                         validAnswer = True
                     else:
                         print("Invalid answer. Try again")
@@ -90,7 +97,10 @@ def main (stdscr):
         stdscr.move(cursory, newx)
 
     def right(): # TODO: OOB avoidance
-        newx = cursorx + 1
+        if cursorx != stdscr.getmaxyx()[1] - 1:
+            newx = cursorx + 1
+        else:
+            newx = cursorx
         stdscr.move(cursory, newx)
 
     def up():
@@ -101,7 +111,10 @@ def main (stdscr):
         stdscr.move(newy, cursorx)
 
     def down(): # TODO: OOB avoidance
-        newy = cursory + 1
+        if cursory != stdscr.getmaxyx()[0] - 1:
+            newy = cursory + 1
+        else:
+            newy = cursory
         stdscr.move(newy, cursorx)
 
 #==================================== Editing ====================================#
@@ -136,6 +149,9 @@ def main (stdscr):
 
         elif key == "KEY_DOWN":
             down()
+
+        elif key == "KEY_RESIZE":
+            pass
 
         else:
             stdscr.addstr(key) # Add input to the screen
