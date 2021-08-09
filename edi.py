@@ -3,15 +3,13 @@ import sys # for argument handling
 import curses # ncurses
 import re
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
-import keyboard
 
 global filename
 filename = ""
-global liststr
-liststr = []
 
 def main (stdscr):
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct
+
 #============================Argument handling ============================#
     arguments = sys.argv
     if len(arguments) > 2: # Checks if there are more than one argument. If there is, an error is given.
@@ -27,6 +25,7 @@ def main (stdscr):
 #==================================== Functions ====================================#
     def save_close():
         contents = []
+        newcontents = [] # Stores new contents list after RegEx
         for y in range (stdscr.getmaxyx()[0]):
             contents.append(str(stdscr.instr(y,0)))
         # instr doesn't really work for more than one line and is quite impractical
@@ -37,27 +36,33 @@ def main (stdscr):
         create.close()
         save = open(filename, "a")
         for s in contents: # Do some RegEx stuff
-            s = re.sub("\'", "", s)
-            s = re.sub("^b", "", s)
-            s = re.sub("\s*$", "\n", s)
-            #news = re.sub("\s{10,}", "", s) # If there is more than 10 whitespace, replace them with no whitespace
-            #s = re.sub("\'b\'", "\n", news)
+            s = re.sub("\'", "", s) # Find "'" and remove it
+            s = re.sub("^b", "", s) # Find all "b" at beginning of line and remove it
+            s = "".join(s.rstrip()) # Strip all white space to the right of line
+            s = s + "\n" # Add newline to each line as it has just been removed
+            newcontents.append(s) # Store strings that pass the RegEx test in new list
+
+        index = 0 # Marks the index after the last index that holds a non-blank string
+        curindex = 0
+        for s in newcontents: # Find EOF by finding last non-blank string
+            if not re.search("^\s*$", s): # If the string isn't only white space
+                # Update index so it becomes the index after the non-empty string
+                index = curindex + 1
+            curindex += 1 # Update current index for next iteration
+
+        for x in range(index, len(newcontents)):
+            del newcontents[index] # Remove all the strings after EOF
+
+        for s in newcontents:
             save.write(s)
-        #for y in range (stdscr.getmaxyx()[1]):
 
         save.close()
-        #hej = str(contents)
-        #liststr.append(hej)
-        #for i in liststr:
-            #save.write(i)
-            #save.close()
-        #save.write(str(contents)) # Convert the row of bytes to a string and save it //TODO converte to a list of characters pr. row
-        #save.close()
         exit()
 
     def delete(): # Doesn't work with the default GNOME terminal
         if cursorx != 0: # preventing crash
-            stdscr.delch(cursory, cursorx - 1) # Delete the character that is one to the left from the cursor
+            stdscr.delch(cursory, cursorx - 1) # Delete the character that is one to the
+            # left from the cursor
 
     def left():
         if cursorx != 0:
@@ -83,7 +88,8 @@ def main (stdscr):
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
-        stdscr.refresh() # Refresh the screen, so the commands that are being send to stdscr actually gets executed
+        stdscr.refresh() # Refresh the screen, so the commands that are being send to stdscr
+        # actually gets executed
         cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
         cursorx = cursorlist[1]
         cursory = cursorlist[0]
@@ -93,10 +99,12 @@ def main (stdscr):
         if input == "KEY_F(1)": # exit without saving
             exit()
 
-        if input == "KEY_F(2)": # Saves the file with the content to a file named "testing". //TODO: input filename
+        if input == "KEY_F(2)": # Saves the file with the content to a file named "testing".
+        # //TODO input filename
             save_close()
 
-        elif input == "KEY_BACKSPACE": # Doesn't work with the default GNOME terminal
+        elif input == "KEY_BACKSPACE": # Doesn't work with the default GNOME terminal //TODO make
+        # it universal
             delete()
 
 #==================================== Cursor keys ====================================#
