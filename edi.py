@@ -1,13 +1,13 @@
 import os
 import sys # for argument handling
 import curses # ncurses
-import re
+import re # RegEx
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
 filename = ""
 
 def main (stdscr):
     global filename
-    stdscr.leaveok(False) # Make it so the cursor coordinates are correct
+    stdscr.leaveok(False) # Make it so the cursor coordinates are correct/generally work
 
 #============================Argument handling ============================#
     arguments = sys.argv
@@ -76,7 +76,7 @@ def main (stdscr):
 
         save.close()
         exit()
-    # TODO:
+    # TODO: deleting past the current line
     def delete(): # Doesn't work with the default GNOME terminal
         if cursorx != 0: # preventing crash
             stdscr.delch(cursory, cursorx - 1) # Delete the character that is one to the
@@ -117,7 +117,7 @@ def main (stdscr):
         if key == "KEY_F(1)": # exit without saving
             exit()
 
-        if key == "KEY_F(2)": # Saves the file with the content to a file named "testing".
+        if key == "KEY_F(2)": # Saves the file with the content to a user specified file.
             save_close()
 
         elif key == "KEY_BACKSPACE": # Doesn't work with the default GNOME terminal //TODO make
