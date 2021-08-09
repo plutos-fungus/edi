@@ -38,7 +38,7 @@ def main (stdscr):
         if input == "KEY_F(2)": # gem fil med indhold til en fil ved navn testing. TODO: input filnavn
             save_close()
 
-        elif input == "KEY_BACKSPACE":
+        elif input == "KEY_BACKSPACE": # Broken as of now
             if cursorx != 0: # preventing crash
                 stdscr.delch(cursory, cursorx - 1) # slet karakteren, som er en til venstre for cursoren.
 
