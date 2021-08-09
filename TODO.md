@@ -7,3 +7,4 @@
 -  ~~If file passed as argument doesn't exist, create file~~
 - Read config file for color?
 - Fix program lock-up after a random amout of ctrl-key and any character combination
+- Delete past the current line
