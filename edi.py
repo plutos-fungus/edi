@@ -3,6 +3,7 @@ import sys # for argument handling
 import curses # ncurses
 import re
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
+import keyboard
 
 global filename
 filename = ""
@@ -35,10 +36,13 @@ def main (stdscr):
         create = open(filename, "w")
         create.close()
         save = open(filename, "a")
-        for s in contents:
-            news = re.sub("\s{10,}", "", s)
-            s = re.sub("\'b\'", "\n", news)
-            save.write(news)
+        for s in contents: # Do some RegEx stuff
+            s = re.sub("\'", "", s)
+            s = re.sub("^b", "", s)
+            s = re.sub("\s*$", "\n", s)
+            #news = re.sub("\s{10,}", "", s) # If there is more than 10 whitespace, replace them with no whitespace
+            #s = re.sub("\'b\'", "\n", news)
+            save.write(s)
         #for y in range (stdscr.getmaxyx()[1]):
 
         save.close()
