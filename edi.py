@@ -2,14 +2,22 @@ import os
 import sys # for argument handling
 import curses # ncurses
 import re # RegEx
+import locale # encoding
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
+
+#============================ Initialized values ============================#
 filename = ""
 files = os.listdir()
+locale.setlocale(locale.LC_ALL, '')
+code = locale.getpreferredencoding()
 
 def main (stdscr):
     global files
     global filename
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct/generally work
+    curses.set_tabsize(4)
+    #stdscr.scrollok(True)
+    #stdscr.idlok(True)
 
 #============================ Argument handling ============================#
     arguments = sys.argv
@@ -29,6 +37,7 @@ def main (stdscr):
 
 #==================================== Functions ====================================#
     def save_close():
+        global code
         global filename
         contents = []
         newcontents = [] # Stores new contents list after RegEx
@@ -38,6 +47,7 @@ def main (stdscr):
         stdscr.clear()
         stdscr.refresh()
         curses.endwin()
+
         if filename == "": # Ask about the name of the file if the file isn't one that has been opened
             nameFound = False
             while not nameFound:
@@ -87,7 +97,11 @@ def main (stdscr):
     def delete(): # Doesn't work with the default GNOME terminal
         if cursorx != 0: # preventing crash
             stdscr.delch(cursory, cursorx - 1) # Delete the character that is one to the
-            # left from the cursor
+
+    def back_delete():
+        if cursorx != 0: # preventing crash
+            stdscr.delch(cursory, cursorx) # Delete the character to the righ. This also
+            # moves the other characters on that line one closer to the cursor
 
     def left():
         if cursorx != 0:
@@ -96,7 +110,7 @@ def main (stdscr):
             newx = cursorx
         stdscr.move(cursory, newx)
 
-    def right(): # TODO: OOB avoidance
+    def right(): # TODO: OOB avoidance // temporarily fixed
         if cursorx != stdscr.getmaxyx()[1] - 1:
             newx = cursorx + 1
         else:
@@ -124,36 +138,39 @@ def main (stdscr):
         cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
         cursorx = cursorlist[1]
         cursory = cursorlist[0]
-        key = stdscr.getkey()
+        key = stdscr.get_wch()
 
 #==================================== Function keys ====================================#
-        if key == "KEY_F(1)": # exit without saving
-            exit()
+        if key == 265: # F1
+            exit() # exit without saving
 
-        if key == "KEY_F(2)": # Saves the file with the content to a user specified file.
-            save_close()
+        if key == 266: # F2
+            save_close() # Saves the file with the content to a user specified file.
 
-        elif key == "KEY_BACKSPACE": # Doesn't work with the default GNOME terminal //TODO make
-        # it universal
+        elif key == 263: # Backspace
+        # Doesn't work with the default GNOME terminal //TODO make it universal
             delete()
 
+        elif key == 330: #Delete-key
+            back_delete()
+
 #==================================== Cursor keys ====================================#
-        elif key == "KEY_LEFT":
+        elif key == 260: # Left key
             left()
 
-        elif key == "KEY_RIGHT":
+        elif key == 261: # Right key
             right()
 
-        elif key == "KEY_UP":
+        elif key == 259: # Up key
             up()
 
-        elif key == "KEY_DOWN":
+        elif key == 258: # Down key
             down()
 
-        elif key == "KEY_RESIZE":
+        elif key == 410: # Resize event
             pass
 
         else:
-            stdscr.addstr(key) # Add input to the screen
+            stdscr.addstr(str(key)) # Add input to the screen
 
 wrapper(main)
