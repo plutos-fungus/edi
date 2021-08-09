@@ -2,12 +2,10 @@ import os
 import curses
 from curses import wrapper
 
-
-
-
 def main (stdscr):
     stdscr.leaveok(False) # gør sådan at cursor koordinaterne faktisk er korrekte
 
+#==================================== Functions ====================================#
     def save_close():
         contents = stdscr.instr(0,0) # kopier skærmens tekstindhold til en række bytes
         # instr virker ikke rigtig til mere end en linje og er ret upraktisk
@@ -21,10 +19,33 @@ def main (stdscr):
         save.close()
         exit()
 
-    def delete():
-        # Den er ikke glad for delete koden
-        pass
+    def delete(): # TODO FIX. It doesn't work
+        if cursorx != 0: # preventing crash
+            stdscr.delch(cursory, cursorx - 1) # sDelete the character that is one to the left from the cursor
 
+    def left():
+        if cursorx != 0:
+            newx = cursorx - 1
+        else:
+            newx = cursorx
+        stdscr.move(cursory, newx)
+
+    def right():
+        newx = cursorx + 1
+        stdscr.move(cursory, newx)
+
+    def up():
+        if cursory != 0:
+            newy = cursory - 1
+        else:
+            newy = cursory
+        stdscr.move(newy, cursorx)
+
+    def down():
+        newy = cursory + 1
+        stdscr.move(newy, cursorx)
+
+#==================================== Editing ====================================#
     while True: #Text editor loop
         stdscr.refresh() # refresh skærmen, sådan at de kommandoer, som sendes til stdscr, rent faktisk udføres
         cursorlist = list(curses.getsyx()) # får nuværende cursor posytion, y først, x sidst
@@ -32,41 +53,28 @@ def main (stdscr):
         cursory = cursorlist[0]
         input = stdscr.getkey()
 
+#==================================== Function keys ====================================#
         if input == "KEY_F(1)": # exit without saving
-            break
+            exit()
 
         if input == "KEY_F(2)": # gem fil med indhold til en fil ved navn testing. TODO: input filnavn
             save_close()
 
-        elif input == "KEY_BACKSPACE": # Broken as of now
-            if cursorx != 0: # preventing crash
-                stdscr.delch(cursory, cursorx - 1) # slet karakteren, som er en til venstre for cursoren.
+        elif input == "KEY_BACKSPACE" or input == "^?": # Broken as of now
+            delete()
 
-
-            #cursor flytte kode
+#==================================== Cursor keys ====================================#
         elif input == "KEY_LEFT":
-            if cursorx != 0:
-                newx = cursorx - 1
-
-            else:
-                newx = cursorx
-            stdscr.move(cursory, newx)
+            left()
 
         elif input == "KEY_RIGHT":
-            newx = cursorx + 1
-            stdscr.move(cursory, newx)
+            right()
 
         elif input == "KEY_UP":
-            if cursory != 0:
-                newy = cursory - 1
-
-            else:
-                newy = cursory
-            stdscr.move(newy, cursorx)
+            up()
 
         elif input == "KEY_DOWN":
-            newy = cursory + 1
-            stdscr.move(newy, cursorx)
+            down()
 
         else:
             stdscr.addstr(input) # tilføj input til skærmen
