@@ -19,9 +19,9 @@ def main (stdscr):
         save.close()
         exit()
 
-    def delete(): # TODO FIX. It doesn't work
+    def delete(): # Doesn't work with the default GNOME terminal
         if cursorx != 0: # preventing crash
-            stdscr.delch(cursory, cursorx - 1) # sDelete the character that is one to the left from the cursor
+            stdscr.delch(cursory, cursorx - 1) # Delete the character that is one to the left from the cursor
 
     def left():
         if cursorx != 0:
@@ -60,7 +60,7 @@ def main (stdscr):
         if input == "KEY_F(2)": # gem fil med indhold til en fil ved navn testing. TODO: input filnavn
             save_close()
 
-        elif input == "KEY_BACKSPACE" or input == "^?": # Broken as of now
+        elif input == "KEY_BACKSPACE": # Doesn't work with the default GNOME terminal
             delete()
 
 #==================================== Cursor keys ====================================#
