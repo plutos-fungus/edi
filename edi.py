@@ -124,7 +124,7 @@ def main (stdscr):
             newy = cursory
         stdscr.move(newy, cursorx)
 
-    def down(): # TODO: OOB avoidance
+    def down(): # TODO: OOB avoidance (temp fix)
         if cursory != stdscr.getmaxyx()[0] - 1:
             newy = cursory + 1
         else:
