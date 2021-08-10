@@ -12,12 +12,12 @@ files = os.listdir()
 lines = 0 
 cols = 0
 # Scroll tracker 
-downscrolls = False  
 
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
 def main (stdscr):
+    stdscr.refresh() 
     global files
     global filename
     # Pad boundaries 
@@ -135,7 +135,7 @@ def main (stdscr):
             newy = cursory - 1
         else:
             newy = cursory
-        pad.move(newy + downscrolls, cursorx)
+        pad.move(newy, cursorx)
 
     def down(): # TODO: OOB avoidance (temp fix)
         #pad.addstr(str(cursory) + "og" + str(curses.LINES - 1))
@@ -147,7 +147,6 @@ def main (stdscr):
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
-        global downscrolls
         pad.refresh(lines - curses.LINES, cols - curses.COLS, 0, 0, curses.LINES, curses.COLS) # Refresh the screen, so the commands that are being send to stdscr
         # actually gets executed
         cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
