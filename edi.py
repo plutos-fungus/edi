@@ -3,27 +3,36 @@ import sys # for argument handling
 import curses # ncurses
 import re # RegEx
 import locale # encoding
+import signal # For blocking of ctrl-c interrupt
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
+
+#============================ Ctrl-c handling ===============================#
+def catch_ctrl_C(signum, frame):
+    pass
+    # do nothing when interrupted lol
+signal.signal(signal.SIGINT, catch_ctrl_C)
 
 #============================ Initialized values ============================#
 filename = ""
 files = os.listdir()
-# Pad boundaries 
-lines = 0 
+# Pad boundaries
+lines = 0
 cols = 0
-# Scroll tracker 
+# Scroll tracker
+interrupt = 0
 
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
-def main (stdscr):
-    stdscr.refresh() 
+
+def main(stdscr):
+    stdscr.refresh()
     global files
     global filename
-    # Pad boundaries 
+    # Pad boundaries
     global lines
-    global cols 
-    lines = curses.LINES 
+    global cols
+    lines = curses.LINES
     cols = curses.COLS
     # Pad init
     pad = curses.newpad(lines, cols)
@@ -59,7 +68,7 @@ def main (stdscr):
             contents.append(str(pad.instr(y,0)))
         # instr doesn't really work for more than one line and is quite impractical
         pad.clear()
-        pad.refresh(lines - (curses.LINES), cols - (curses.COLS), 0, 0, curses.LINES, curses.COLS) 
+        pad.refresh(lines - (curses.LINES), cols - (curses.COLS), 0, 0, curses.LINES, curses.COLS)
         curses.endwin()
 
         if filename == "": # Ask about the name of the file if the file isn't one that has been opened
@@ -116,7 +125,7 @@ def main (stdscr):
     def back_delete():
         pad.delch(cursory, cursorx) # Delete the character to the righ. This also
         # moves the other characters on that line one closer to the cursor
-        
+
     def left():
         if cursorx != 0:
             newx = cursorx - 1
@@ -153,7 +162,10 @@ def main (stdscr):
         cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
         cursorx = cursorlist[1]
         cursory = cursorlist[0]
-        key = stdscr.get_wch()
+        try:
+            key = stdscr.get_wch()
+        except curses.error:
+            key = -1
 
 #==================================== Function keys ====================================#
         if key == 265: # F1
@@ -163,10 +175,10 @@ def main (stdscr):
             save_close() # Saves the file with the content to a user specified file.
 
         if key == 267:
-            pass 
+            pass
 
         if key == 268:
-            pass 
+            pass
 
         elif key == 263: # Backspace
         # Doesn't work with the default GNOME terminal //TODO make it universal
@@ -191,7 +203,9 @@ def main (stdscr):
         elif key == 410: # Resize event
             pass
 
+        elif key == -1: # No key has been registered
+            pass
+
         else:
             pad.addstr(str(key)) # Add input to the screen
-
 wrapper(main)
