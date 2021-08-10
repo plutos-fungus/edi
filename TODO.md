@@ -12,4 +12,3 @@ Fixed:
 - If file passed as argument doesn't exist, create file
 - Fix out of bounds errors (temp solution)
 - Remove options to ungracefully exit (such as ctrl+c)
-- 
