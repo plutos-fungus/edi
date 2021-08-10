@@ -8,5 +8,5 @@ language:
   - #c++.yml
   - python.yml
 
-color_scheme:
+theme:
   - toast.yml
