@@ -1,0 +1,12 @@
+# Config-file for color and syntax highlighting
+# Since there are more important thing to fix with the program itself
+# as of now, we are just setting up the structure of the config-file
+# and handling of it
+
+language:
+  - #c.yml
+  - #c++.yml
+  - python.yml
+
+theme:
+  - toast.yml

@@ -109,13 +109,14 @@ def main (stdscr):
         exit()
     # TODO: deleting past the current line
     def delete(): # Doesn't work with the default GNOME terminal
+
         if cursorx != 0: # preventing crash
             pad.delch(cursory, cursorx - 1) # Delete the character that is one to the
 
     def back_delete():
         pad.delch(cursory, cursorx) # Delete the character to the righ. This also
         # moves the other characters on that line one closer to the cursor
-
+        
     def left():
         if cursorx != 0:
             newx = cursorx - 1

@@ -1,0 +1,60 @@
+
+opperators:
+  Arithmetic_operators:
+    - +
+    - -
+    - -*
+    - /
+    - -**
+    - //
+
+  Assignment_operators:
+    - =
+    - +=
+    - -=
+    - -*=
+    - /=
+    - -%=
+    - //=
+    - -**=
+    - -&=
+    - |=
+    - ^=
+    - >>=
+    - <<=
+
+  Comparison_operators:
+    - ==
+    - -!=
+    - >
+    - <
+    - >=
+    - <=
+
+  Python_Logical_Operators:
+    - append
+    - or
+    - not
+
+  Python_Identity_Operators:
+    - is
+    - is not
+
+  Python_Membership_Operators:
+    - in
+    - not in
+
+  Python Bitwise Operators:
+    - -&
+    - |
+    - ^
+    - -~
+    - >>
+    - <<
+
+funktions:
+  - (
+  - )
+
+comment:
+  - --#
