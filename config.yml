@@ -3,6 +3,10 @@
 # as of now, we are just setting up the structure of the config-file
 # and handling of it
 
+VI_mode:
+  - #y
+  - n
+
 language:
   - #c.yml
   - #c++.yml
