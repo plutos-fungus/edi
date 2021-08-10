@@ -8,12 +8,26 @@ from curses import wrapper # wrapper to run ncurses with standard error handling
 #============================ Initialized values ============================#
 filename = ""
 files = os.listdir()
+# Pad boundaries 
+lines = 0 
+cols = 0
+# Scroll tracker 
+
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
 def main (stdscr):
+    stdscr.refresh() 
     global files
     global filename
+    # Pad boundaries 
+    global lines
+    global cols 
+    lines = curses.LINES 
+    cols = curses.COLS
+    # Pad init
+    pad = curses.newpad(lines, cols)
+
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct/generally work
     curses.set_tabsize(4)
     #stdscr.scrollok(True)
@@ -30,7 +44,7 @@ def main (stdscr):
             contents = f.readlines()
             f.close()
             for i in contents:
-                stdscr.addstr(i)
+                pad.addstr(i)
         else:
             create = open(filename, "w")
             create.close()
@@ -41,11 +55,11 @@ def main (stdscr):
         global filename
         contents = []
         newcontents = [] # Stores new contents list after RegEx
-        for y in range (stdscr.getmaxyx()[0]):
-            contents.append(str(stdscr.instr(y,0)))
+        for y in range (pad.getmaxyx()[0]):
+            contents.append(str(pad.instr(y,0)))
         # instr doesn't really work for more than one line and is quite impractical
-        stdscr.clear()
-        stdscr.refresh()
+        pad.clear()
+        pad.refresh(lines - (curses.LINES), cols - (curses.COLS), 0, 0, curses.LINES, curses.COLS) 
         curses.endwin()
 
         if filename == "": # Ask about the name of the file if the file isn't one that has been opened
@@ -95,44 +109,46 @@ def main (stdscr):
         exit()
     # TODO: deleting past the current line
     def delete(): # Doesn't work with the default GNOME terminal
-        if cursorx != 0: # Preventing crash
-            stdscr.delch(cursory, cursorx - 1) # Delete the character that is one to the
+
+        if cursorx != 0: # preventing crash
+            pad.delch(cursory, cursorx - 1) # Delete the character that is one to the
 
     def back_delete():
-        stdscr.delch(cursory, cursorx) # Delete the character to the righ. This also
-        # Moves the other characters on that line one closer to the cursor
-
+        pad.delch(cursory, cursorx) # Delete the character to the righ. This also
+        # moves the other characters on that line one closer to the cursor
+        
     def left():
         if cursorx != 0:
             newx = cursorx - 1
         else:
             newx = cursorx
-        stdscr.move(cursory, newx)
+        pad.move(cursory, newx)
 
     def right(): # TODO: OOB avoidance // temporarily fixed
-        if cursorx != stdscr.getmaxyx()[1] - 1:
+        if cursorx != curses.COLS - 1:
             newx = cursorx + 1
         else:
             newx = cursorx
-        stdscr.move(cursory, newx)
+        pad.move(cursory, newx)
 
     def up():
         if cursory != 0:
             newy = cursory - 1
         else:
             newy = cursory
-        stdscr.move(newy, cursorx)
+        pad.move(newy, cursorx)
 
     def down(): # TODO: OOB avoidance (temp fix)
-        if cursory != stdscr.getmaxyx()[0] - 1:
+        #pad.addstr(str(cursory) + "og" + str(curses.LINES - 1))
+        if cursory != curses.LINES - 1:
             newy = cursory + 1
         else:
             newy = cursory
-        stdscr.move(newy, cursorx)
+        pad.move(newy, cursorx)
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
-        stdscr.refresh() # Refresh the screen, so the commands that are being send to stdscr
+        pad.refresh(lines - curses.LINES, cols - curses.COLS, 0, 0, curses.LINES, curses.COLS) # Refresh the screen, so the commands that are being send to stdscr
         # actually gets executed
         cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
         cursorx = cursorlist[1]
@@ -145,6 +161,12 @@ def main (stdscr):
 
         if key == 266: # F2
             save_close() # Saves the file with the content to a user specified file.
+
+        if key == 267:
+            pass 
+
+        if key == 268:
+            pass 
 
         elif key == 263: # Backspace
         # Doesn't work with the default GNOME terminal //TODO make it universal
@@ -170,6 +192,6 @@ def main (stdscr):
             pass
 
         else:
-            stdscr.addstr(str(key)) # Add input to the screen
+            pad.addstr(str(key)) # Add input to the screen
 
 wrapper(main)
