@@ -95,13 +95,12 @@ def main (stdscr):
         exit()
     # TODO: deleting past the current line
     def delete(): # Doesn't work with the default GNOME terminal
-        if cursorx != 0: # preventing crash
+        if cursorx != 0: # Preventing crash
             stdscr.delch(cursory, cursorx - 1) # Delete the character that is one to the
 
     def back_delete():
-        if cursorx != 0: # preventing crash
-            stdscr.delch(cursory, cursorx) # Delete the character to the righ. This also
-            # moves the other characters on that line one closer to the cursor
+        stdscr.delch(cursory, cursorx) # Delete the character to the righ. This also
+        # Moves the other characters on that line one closer to the cursor
 
     def left():
         if cursorx != 0:
