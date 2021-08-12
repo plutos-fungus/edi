@@ -201,7 +201,10 @@ def main(stdscr):
             down()
 
         elif key == 410: # Resize event
-            pass
+            if curses.LINES > lines:
+                lines = curses.LINES
+            if curses.COLS > cols: 
+                cols = curses.COLS 
 
         elif key == -1: # No key has been registered
             pass
