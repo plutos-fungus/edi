@@ -1,11 +1,11 @@
-# Config-file for color and syntax highlighting
+# Config-file for color and syntax highlighting and different modes.
 # Since there are more important thing to fix with the program itself
 # as of now, we are just setting up the structure of the config-file
 # and handling of it
 
 VI_mode:
-  - #y
-  - n
+  - y
+  - #n
 
 language:
   - #c.yml
