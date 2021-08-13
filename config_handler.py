@@ -6,14 +6,13 @@ from yaml.loader import SafeLoader
 # Please
 
 config_file = 'config.yml'
-language_files = 'configs/language'
-themes_files = 'configs/theme'
+language_files = 'configs/languages/'
+themes_files = 'configs/theme/'
 
 VI_mode_on = False
 
 with open(config_file, 'r') as config:
     config = yaml.load(config, Loader=SafeLoader)
-    language = ""
     VI_mode = config['VI_mode']
     language = config['language']
     theme = config['theme']
@@ -25,17 +24,23 @@ with open(config_file, 'r') as config:
                 VI_mode_on = False
                 break
             elif i == "y" and i != "n":
-                print("VI mode? yes")
+                #print("VI mode? yes")
                 VI_mode_on = True
 
             elif i == "n" and i != "y":
-                print("VI mode? no")
+                #print("VI mode? no")
                 VI_mode_on = False
 
     for i in language:
         if i is not None:
-            print(i)
+            #print(i)
+            with open(language_files + i, 'r') as language_config:
+                language_config = yaml.load(language_files + i, Loader=SafeLoader)
+                #opperators = language_config['opperators']
+                #print(opperators)
+
 
     for i in theme:
         if i is not None:
-            print(i)
+            pass
+            #print(i)

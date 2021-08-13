@@ -6,7 +6,7 @@
 # setting in line
 
 VI_mode:
-  - y
+  - #y
   - n
 
 language:
