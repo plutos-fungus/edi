@@ -2,10 +2,12 @@
 # Since there are more important thing to fix with the program itself
 # as of now, we are just setting up the structure of the config-file
 # and handling of it
+# If any setting is both on and off, it will be set to the first
+# setting in line
 
 VI_mode:
   - y
-  - #n
+  - n
 
 language:
   - #c.yml

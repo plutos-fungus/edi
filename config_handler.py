@@ -12,7 +12,7 @@ themes_files = 'configs/theme'
 VI_mode_on = False
 
 with open(config_file, 'r') as config:
-    config = yaml.load(config, Loader=yaml.FullLoader) # Loader=SafeLoader
+    config = yaml.load(config, Loader=SafeLoader)
     language = ""
     VI_mode = config['VI_mode']
     language = config['language']
@@ -21,11 +21,14 @@ with open(config_file, 'r') as config:
     print("=== Configs ===")
     for i in VI_mode:
         if i is not None:
-            print(i)
-            if i == "y":
+            if i == "n" and i == "y":
+                VI_mode_on = False
+                break
+            elif i == "y" and i != "n":
                 print("VI mode? yes")
                 VI_mode_on = True
-            elif i == "n":
+
+            elif i == "n" and i != "y":
                 print("VI mode? no")
                 VI_mode_on = False
 
