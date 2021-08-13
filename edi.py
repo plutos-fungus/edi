@@ -16,10 +16,11 @@ signal.signal(signal.SIGINT, catch_ctrl_C)
 filename = ""
 files = os.listdir()
 # Pad boundaries
-lines = 0
-cols = 0
+# lines = 0
+# cols = 0
 # Scroll tracker
 interrupt = 0
+pad_pos = 0
 
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
@@ -29,13 +30,14 @@ def main(stdscr):
     stdscr.refresh()
     global files
     global filename
+    global pad_pos
     # Pad boundaries
-    global lines
-    global cols
-    lines = curses.LINES
-    cols = curses.COLS
+    # global lines
+    # global cols
+    # lines = curses.LINES
+    # cols = curses.COLS
     # Pad init
-    pad = curses.newpad(lines, cols)
+    pad = curses.newpad(curses.LINES, curses.COLS)
 
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct/generally work
     curses.set_tabsize(4)
@@ -68,7 +70,7 @@ def main(stdscr):
             contents.append(str(pad.instr(y,0)))
         # instr doesn't really work for more than one line and is quite impractical
         pad.clear()
-        pad.refresh(lines - (curses.LINES), cols - (curses.COLS), 0, 0, curses.LINES, curses.COLS)
+        pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
         curses.endwin()
 
         if filename == "": # Ask about the name of the file if the file isn't one that has been opened
@@ -141,27 +143,35 @@ def main(stdscr):
         pad.move(cursory, newx)
 
     def up():
-        if cursory != 0:
+        global pad_pos
+        if  screeny != 0:
             newy = cursory - 1
+            pad.move(newy, cursorx)
         else:
-            newy = cursory
-        pad.move(newy, cursorx)
+            pad_pos -= 1
+            pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
 
     def down(): # TODO: OOB avoidance (temp fix)
+        global pad_pos
+        
         #pad.addstr(str(cursory) + "og" + str(curses.LINES - 1))
-        if cursory != curses.LINES - 1:
-            newy = cursory + 1
-        else:
-            newy = cursory
+        if screeny == curses.LINES - 1:
+            pad_pos += 1
+            if cursory == pad.getmaxyx()[0] - 1:
+                pad.resize(curses.LINES + pad_pos, curses.COLS)
+        newy = cursory + 1
+        pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
         pad.move(newy, cursorx)
+        # pad.addstr(str(newy) + " " + str(pad.getmaxyx()[0]))
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
-        pad.refresh(lines - curses.LINES, cols - curses.COLS, 0, 0, curses.LINES, curses.COLS) # Refresh the screen, so the commands that are being send to stdscr
+        pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
         # actually gets executed
-        cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
+        cursorlist = list(pad.getyx()) # Gets the current cursor position. y first, x last
         cursorx = cursorlist[1]
         cursory = cursorlist[0]
+        screeny = curses.getsyx()[0]
         try:
             key = stdscr.get_wch()
         except curses.error:
@@ -175,10 +185,12 @@ def main(stdscr):
             save_close() # Saves the file with the content to a user specified file.
 
         if key == 267:
-            pass
+            pad_pos += 1 
+            pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
 
         if key == 268:
-            pass
+            pad_pos -= 1 
+            pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
 
         elif key == 263: # Backspace
         # Doesn't work with the default GNOME terminal //TODO make it universal
@@ -201,10 +213,11 @@ def main(stdscr):
             down()
 
         elif key == 410: # Resize event
-            if curses.LINES > lines:
-                lines = curses.LINES
-            if curses.COLS > cols: 
-                cols = curses.COLS 
+            # if curses.LINES > lines:
+            #     lines = curses.LINES
+            # if curses.COLS > cols: 
+            #     cols = curses.COLS 
+            pass
 
         elif key == -1: # No key has been registered
             pass
