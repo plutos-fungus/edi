@@ -1,3 +1,4 @@
+# edi
 ![image](https://user-images.githubusercontent.com/71628935/129461399-bcc4a9b1-44ee-49e2-8d8a-d9f0e44c513d.png)
 
 A simple text editor using python and curses. 
