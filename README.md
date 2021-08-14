@@ -10,3 +10,7 @@ Use of this software as a daily driver is not recomended; it's just a hobby proj
 
 ## Terminal emulators known not to work (issues interpreting backspace)
 - GNOME terminal 
+
+## Dependencies 
+- libncurses
+- if using one of the releases, glibc 2.33 or newer
