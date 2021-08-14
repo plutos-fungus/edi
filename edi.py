@@ -223,9 +223,11 @@ def main(stdscr):
             if curses.COLS > pad.getmaxyx()[1]: 
                 pad.resize(pad.getmaxyx()[0], curses.COLS)
 
-
         elif key == -1: # No key has been registered
             pass
+
+        elif str(key) == None:
+            pass 
 
         else:
             key_char = str(key)
@@ -239,6 +241,5 @@ def main(stdscr):
                 pad_x += 1
                 if cursorx == pad.getmaxyx()[1] - 1: 
                     pad.resize(pad.getmaxyx()[0], curses.COLS + pad_x)
-
             pad.addstr(key_char) # Add input to the screen
 wrapper(main)
