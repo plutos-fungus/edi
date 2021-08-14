@@ -9,6 +9,7 @@ Unfixed:
 
 Fixed:
 - If file passed as argument doesn't exist, create file
-- Fix out of bounds errors (temp solution)
+- Fix out of bounds errors
 - Remove options to ungracefully exit (such as ctrl+c)
-- Switch from an ncurses screen to an ncurses pad in order to have more "space" for editing
+- Switch from an ncurses screen to an ncurses pad in order to have more "space" for editing - implemented scrolling
+- Loading files bigger than the terminal emulator
