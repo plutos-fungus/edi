@@ -234,11 +234,11 @@ def main(stdscr):
                     pad_y += 1 
                     if cursory == pad.getmaxyx()[0] - 1:
                         pad.resize(curses.LINES + pad_y, curses.COLS)
+
             if screenx == stdscr.getmaxyx()[1] - 1:
                 pad_x += 1
                 if cursorx == pad.getmaxyx()[1] - 1: 
                     pad.resize(pad.getmaxyx()[0], curses.COLS + pad_x)
-
 
             pad.addstr(key_char) # Add input to the screen
 wrapper(main)
