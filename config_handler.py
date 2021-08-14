@@ -20,10 +20,8 @@ with open(config_file, 'r') as config:
     print("=== Configs ===")
     for i in VI_mode:
         if i is not None:
-            if i == "n" and i == "y":
-                VI_mode_on = False
-                break
-            elif i == "y" and i != "n":
+
+            if i == "y" and i != "n":
                 #print("VI mode? yes")
                 VI_mode_on = True
 
@@ -31,12 +29,17 @@ with open(config_file, 'r') as config:
                 #print("VI mode? no")
                 VI_mode_on = False
 
+            elif i == "n" and i == "y":
+                VI_mode_on = False
+                break
+
     for i in language:
         if i is not None:
             #print(i)
             with open(language_files + i, 'r') as language_config:
                 language_config = yaml.load(language_files + i, Loader=SafeLoader)
-                #opperators = language_config['opperators']
+                print(language_files + i)
+                #opperators = language_config['language_config']
                 #print(opperators)
 
 

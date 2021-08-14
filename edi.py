@@ -230,6 +230,7 @@ def main(stdscr):
             if curses.COLS > pad.getmaxyx()[1]: 
                 pad.resize(pad.getmaxyx()[0], curses.COLS)
 
+
         elif key == -1: # No key has been registered
             pass
 
