@@ -1,5 +1,5 @@
 # edi
-![image](https://user-images.githubusercontent.com/71628935/129461399-bcc4a9b1-44ee-49e2-8d8a-d9f0e44c513d.png)
+![image](https://user-images.githubusercontent.com/71628935/129461661-6376d40d-b7f8-4aed-b96c-507e41689959.png)
 
 A simple text editor using python and curses. 
 
