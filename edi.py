@@ -144,29 +144,31 @@ def main(stdscr):
 
     def up():
         global pad_pos
-        if  screeny != 0:
+        if cursory != 0:
+            if screeny == 0:
+                if pad_pos != 0:
+                    pad_pos -= 1
+                # pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
+                pad.refresh(pad_pos, 0, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
             newy = cursory - 1
             pad.move(newy, cursorx)
-        else:
-            pad_pos -= 1
-            pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
 
     def down(): # TODO: OOB avoidance (temp fix)
         global pad_pos
         
         #pad.addstr(str(cursory) + "og" + str(curses.LINES - 1))
-        if screeny == curses.LINES - 1:
+        if screeny == stdscr.getmaxyx()[0] - 1:
             pad_pos += 1
             if cursory == pad.getmaxyx()[0] - 1:
                 pad.resize(curses.LINES + pad_pos, curses.COLS)
         newy = cursory + 1
-        pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
         pad.move(newy, cursorx)
-        # pad.addstr(str(newy) + " " + str(pad.getmaxyx()[0]))
+        # pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
+        pad.refresh(pad_pos, 0, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
-        pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
+        pad.refresh(pad_pos, 0, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
         # actually gets executed
         cursorlist = list(pad.getyx()) # Gets the current cursor position. y first, x last
         cursorx = cursorlist[1]
@@ -186,6 +188,7 @@ def main(stdscr):
 
         if key == 267:
             pad_pos += 1 
+            pad.addstr(str(pad.getparyx()[0]))
             pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
 
         if key == 268:
