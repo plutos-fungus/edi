@@ -16,10 +16,12 @@ signal.signal(signal.SIGINT, catch_ctrl_C)
 filename = ""
 files = os.listdir()
 # Pad boundaries
-lines = 0
-cols = 0
+# lines = 0
+# cols = 0
 # Scroll tracker
 interrupt = 0
+pad_y = 0
+pad_x = 0
 
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
@@ -29,13 +31,10 @@ def main(stdscr):
     stdscr.refresh()
     global files
     global filename
-    # Pad boundaries
-    global lines
-    global cols
-    lines = curses.LINES
-    cols = curses.COLS
+    global pad_y
+    global pad_x
     # Pad init
-    pad = curses.newpad(lines, cols)
+    pad = curses.newpad(curses.LINES, curses.COLS)
 
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct/generally work
     curses.set_tabsize(4)
@@ -52,8 +51,20 @@ def main(stdscr):
             f = open(filename)
             contents = f.readlines()
             f.close()
+            maxlen = 0 
             for i in contents:
+                if len(i) > pad.getmaxyx()[1] - 1: # x handling
+                    if len(i) > maxlen:
+                        maxlen = len(i)
+                        pad.resize(pad.getmaxyx()[0], maxlen)
+                if curses.getsyx()[0] == curses.LINES - 1: #y handling
+                    pad_y += 1
+                    pad.resize(pad.getmaxyx()[0] + pad_y, pad.getmaxyx()[1])
                 pad.addstr(i)
+                pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
+            pad_y = 0
+            pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
+            pad.move(0, 0)
         else:
             create = open(filename, "w")
             create.close()
@@ -68,7 +79,7 @@ def main(stdscr):
             contents.append(str(pad.instr(y,0)))
         # instr doesn't really work for more than one line and is quite impractical
         pad.clear()
-        pad.refresh(lines - (curses.LINES), cols - (curses.COLS), 0, 0, curses.LINES, curses.COLS)
+        pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
         curses.endwin()
 
         if filename == "": # Ask about the name of the file if the file isn't one that has been opened
@@ -127,41 +138,54 @@ def main(stdscr):
         # moves the other characters on that line one closer to the cursor
 
     def left():
-        if cursorx != 0:
+        global pad_x
+        if cursorx > 0:
+            if screenx == 0:
+                if pad_x > 0:
+                    pad_x -= 1
+                    pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
             newx = cursorx - 1
-        else:
-            newx = cursorx
-        pad.move(cursory, newx)
+            pad.move(cursory, newx)
 
-    def right(): # TODO: OOB avoidance // temporarily fixed
-        if cursorx != curses.COLS - 1:
-            newx = cursorx + 1
-        else:
-            newx = cursorx
+    def right(): 
+        global pad_x 
+
+        if screenx == stdscr.getmaxyx()[1] - 1:
+            pad_x += 1
+            if cursorx == pad.getmaxyx()[1] - 1: 
+                pad.resize(pad.getmaxyx()[0], curses.COLS + pad_x)
+        newx = cursorx + 1
         pad.move(cursory, newx)
+        pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
 
     def up():
+        global pad_y
         if cursory != 0:
+            if screeny == 0:
+                if pad_y != 0:
+                    pad_y -= 1
+                    pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
             newy = cursory - 1
-        else:
-            newy = cursory
-        pad.move(newy, cursorx)
+            pad.move(newy, cursorx)
 
-    def down(): # TODO: OOB avoidance (temp fix)
-        #pad.addstr(str(cursory) + "og" + str(curses.LINES - 1))
-        if cursory != curses.LINES - 1:
-            newy = cursory + 1
-        else:
-            newy = cursory
+    def down(): 
+        global pad_y
+        if screeny == stdscr.getmaxyx()[0] - 1:
+            pad_y += 1
+            if cursory == pad.getmaxyx()[0] - 1:
+                pad.resize(curses.LINES + pad_y, pad.getmaxyx()[1])
+        newy = cursory + 1
         pad.move(newy, cursorx)
+        pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
-        pad.refresh(lines - curses.LINES, cols - curses.COLS, 0, 0, curses.LINES, curses.COLS) # Refresh the screen, so the commands that are being send to stdscr
-        # actually gets executed
-        cursorlist = list(curses.getsyx()) # Gets the current cursor position. y first, x last
-        cursorx = cursorlist[1]
+        pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+        cursorlist = list(pad.getyx()) # Gets the current cursor position on the pad. y first, x last
+        cursorx= cursorlist[1]
         cursory = cursorlist[0]
+        screeny = curses.getsyx()[0]
+        screenx = curses.getsyx()[1]
         try:
             key = stdscr.get_wch()
         except curses.error:
@@ -174,10 +198,10 @@ def main(stdscr):
         if key == 266: # F2
             save_close() # Saves the file with the content to a user specified file.
 
-        if key == 267:
+        if key == 267: # F3
             pass
 
-        if key == 268:
+        if key == 268: # F4
             pass
 
         elif key == 263: # Backspace
@@ -201,14 +225,27 @@ def main(stdscr):
             down()
 
         elif key == 410: # Resize event
-            if curses.LINES > lines:
-                lines = curses.LINES
-            if curses.COLS > cols:
-                cols = curses.COLS
+            if curses.LINES > pad.getmaxyx()[0]:
+                pad.resize(curses.LINES, pad.getmaxyx()[1])
+            if curses.COLS > pad.getmaxyx()[1]: 
+                pad.resize(pad.getmaxyx()[0], curses.COLS)
+
 
         elif key == -1: # No key has been registered
             pass
 
         else:
-            pad.addstr(str(key)) # Add input to the screen
+            key_char = str(key)
+            if key_char == "\n":
+                if screeny == stdscr.getmaxyx()[0] - 1:
+                    pad_y += 1 
+                    if cursory == pad.getmaxyx()[0] - 1:
+                        pad.resize(curses.LINES + pad_y, curses.COLS)
+            if screenx == stdscr.getmaxyx()[1] - 1:
+                pad_x += 1
+                if cursorx == pad.getmaxyx()[1] - 1: 
+                    pad.resize(pad.getmaxyx()[0], curses.COLS + pad_x)
+
+
+            pad.addstr(key_char) # Add input to the screen
 wrapper(main)
