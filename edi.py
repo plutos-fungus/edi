@@ -15,11 +15,6 @@ signal.signal(signal.SIGINT, catch_ctrl_C)
 #============================ Initialized values ============================#
 filename = ""
 files = os.listdir()
-# Pad boundaries
-# lines = 0
-# cols = 0
-# Scroll tracker
-interrupt = 0
 pad_y = 0
 pad_x = 0
 
@@ -38,8 +33,6 @@ def main(stdscr):
 
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct/generally work
     curses.set_tabsize(4)
-    #stdscr.scrollok(True)
-    #stdscr.idlok(True)
 
 #============================ Argument handling ============================#
     arguments = sys.argv
