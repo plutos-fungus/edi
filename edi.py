@@ -186,14 +186,11 @@ def main(stdscr):
         if key == 266: # F2
             save_close() # Saves the file with the content to a user specified file.
 
-        if key == 267:
-            pad_pos += 1 
-            pad.addstr(str(pad.getparyx()[0]))
-            pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
+        if key == 267: # F3
+            pass
 
-        if key == 268:
-            pad_pos -= 1 
-            pad.refresh(pad_pos, 0, 0, 0, curses.LINES, curses.COLS)
+        if key == 268: # F4
+            pass
 
         elif key == 263: # Backspace
         # Doesn't work with the default GNOME terminal //TODO make it universal
