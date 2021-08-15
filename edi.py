@@ -78,10 +78,8 @@ def main(stdscr):
         if filename == "": # Ask about the name of the file if the file isn't one that has been opened
             nameFound = False
             while not nameFound:
-                print("Which file name/path do you want?")
-                tempfilename = input("")
-                print("Are you sure? (y/n)")
-                answer = input("")
+                tempfilename = input("Which file name/path do you want? ")
+                answer = input("Are you sure? (y/n) ")
                 validAnswer = False
                 while not validAnswer:
                     if answer == "y" or answer == "Y":
