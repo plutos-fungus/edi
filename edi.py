@@ -240,7 +240,9 @@ def main(stdscr):
                 pad.resize(pad.getmaxyx()[0], cursorx + linelength + 5)
             elif cursorx + len(key_char) + linelength > pad.getmaxyx()[1] - 1:
                 pad.resize(pad.getmaxyx()[0], cursorx + len(key_char) + linelength + 1)
+
             pad.insstr(key_char) # Add input to the screen
+
             if key_char == "\n":
                 if screeny == stdscr.getmaxyx()[0] - 1:
                     pad_y += 1 
