@@ -230,20 +230,33 @@ def main(stdscr):
         else:
             key_char = str(key)
             linelength = len(re.sub("\s*$", "", pad.instr(cursory, cursorx).decode("utf-8")))
-            if key_char == "\n":
-                if screeny == stdscr.getmaxyx()[0] - 1:
-                    pad_y += 1 
-                if cursory == pad.getmaxyx()[0] - 1:
-                    pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
             # scrolls pad to the right if cursor is at right edge
             if screenx == stdscr.getmaxyx()[1] - 1:
                 pad_x += 1
             # expands pad if max x is reached 
             if cursorx == pad.getmaxyx()[1] - 1: 
                 pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
-            if cursorx + len(key_char) + linelength > pad.getmaxyx()[1] - 1:
+            if key_char == "\t":
+                pad.resize(pad.getmaxyx()[0], cursorx + linelength + 5)
+            elif cursorx + len(key_char) + linelength > pad.getmaxyx()[1] - 1:
                 pad.resize(pad.getmaxyx()[0], cursorx + len(key_char) + linelength + 1)
             pad.insstr(key_char) # Add input to the screen
-            pad.move(cursory, cursorx + 1)
+            if key_char == "\n":
+                if screeny == stdscr.getmaxyx()[0] - 1:
+                    pad_y += 1 
+                if cursory == pad.getmaxyx()[0] - 1:
+                    pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
+                pad.move(cursory + 1, 0)
+            elif key_char == "\t":
+                if cursorx % 4 == 0 or cursorx == 0:
+                    pad.move(cursory, cursorx + 4) 
+                elif (cursorx - 1) % 4 == 0:
+                    pad.move(cursory, cursorx + 3)
+                elif (cursorx - 2) % 4 == 0:
+                    pad.move(cursory, cursorx + 2)
+                elif (cursorx - 3) % 4 == 0:
+                    pad.move(cursory, cursorx + 1)
+            else:
+                pad.move(cursory, cursorx + 1)
 if __name__ == '__main__':
     wrapper(main)
