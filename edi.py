@@ -242,4 +242,5 @@ def main(stdscr):
             if cursorx == pad.getmaxyx()[1] - 1: 
                 pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
             pad.addstr(key_char) # Add input to the screen
-wrapper(main)
+if __name__ == '__main__':
+    wrapper(main)
