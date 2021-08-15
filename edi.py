@@ -178,13 +178,13 @@ def main(stdscr):
         if key == 265: # F1
             exit() # exit without saving
 
-        if key == 266: # F2
+        elif key == 266: # F2
             save_close() # Saves the file with the content to a user specified file.
 
-        if key == 267: # F3
+        elif key == 267: # F3
             pass
 
-        if key == 268: # F4
+        elif key == 268: # F4
             pass
 
         elif key == 263: # Backspace
