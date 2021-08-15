@@ -17,6 +17,7 @@ filename = ""
 files = os.listdir()
 pad_y = 0
 pad_x = 0
+tabsize = 4 # tab size used by curses
 
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
@@ -27,11 +28,12 @@ def main(stdscr):
     global filename
     global pad_y
     global pad_x
+    global tabsize
     # Pad init
     pad = curses.newpad(curses.LINES, curses.COLS)
 
     stdscr.leaveok(False) # Make it so the cursor coordinates are correct/generally work
-    curses.set_tabsize(4)
+    curses.set_tabsize(tabsize)
 
 #============================ Argument handling ============================#
     arguments = sys.argv
@@ -236,10 +238,8 @@ def main(stdscr):
             # expands pad if max x is reached 
             if cursorx == pad.getmaxyx()[1] - 1: 
                 pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
-            if key_char == "\t":
-                pad.resize(pad.getmaxyx()[0], cursorx + linelength + 5)
-            elif cursorx + len(key_char) + linelength > pad.getmaxyx()[1] - 1:
-                pad.resize(pad.getmaxyx()[0], cursorx + len(key_char) + linelength + 1)
+            if cursorx + tabsize + linelength > pad.getmaxyx()[1] - 1:
+                pad.resize(pad.getmaxyx()[0], cursorx + tabsize + linelength + 1)
 
             pad.insstr(key_char) # Add input to the screen
 
@@ -250,13 +250,13 @@ def main(stdscr):
                     pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
                 pad.move(cursory + 1, 0)
             elif key_char == "\t":
-                if cursorx % 4 == 0 or cursorx == 0:
+                if cursorx % tabsize == 0 or cursorx == 0:
                     pad.move(cursory, cursorx + 4) 
-                elif (cursorx - 1) % 4 == 0:
+                elif (cursorx - 1) % tabsize == 0:
                     pad.move(cursory, cursorx + 3)
-                elif (cursorx - 2) % 4 == 0:
+                elif (cursorx - 2) % tabsize == 0:
                     pad.move(cursory, cursorx + 2)
-                elif (cursorx - 3) % 4 == 0:
+                elif (cursorx - 3) % tabsize == 0:
                     pad.move(cursory, cursorx + 1)
             else:
                 pad.move(cursory, cursorx + 1)
