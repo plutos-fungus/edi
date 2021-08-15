@@ -1,7 +1,5 @@
 # TODO
 Unfixed:
-- Add UTF-8 support, both in text buffer and saving
-- Streamline saving, so it's possible to save apostrophes properly
 - Vi mode?
 - Read config file for color?
 - Fix program lock-up after a random amout of ctrl-key and any character combination
@@ -13,3 +11,4 @@ Fixed:
 - Remove options to ungracefully exit (such as ctrl+c)
 - Switch from an ncurses screen to an ncurses pad in order to have more "space" for editing - implemented scrolling
 - Loading files bigger than the terminal emulator
+- UTF-8 support and proper string conversion when saving
