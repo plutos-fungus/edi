@@ -21,7 +21,6 @@ pad_x = 0
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
-
 def main(stdscr):
     stdscr.refresh()
     global files
@@ -67,9 +66,8 @@ def main(stdscr):
         global code
         global filename
         contents = []
-        newcontents = [] # Stores new contents list after RegEx
         for y in range (pad.getmaxyx()[0]):
-            contents.append(str(pad.instr(y,0)))
+            contents.append(pad.instr(y,0).decode("utf-8"))
         # instr doesn't really work for more than one line and is quite impractical
         pad.clear()
         pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
@@ -95,26 +93,20 @@ def main(stdscr):
         create = open(filename, "w")
         create.close()
         save = open(filename, "a")
-        for s in contents: # Do some RegEx stuff
-            s = re.sub("\'", "", s) # Find "'" and remove it
-            s = re.sub("^b", "", s) # Find all "b" at beginning of line and remove it
-            s = "".join(s.rstrip()) # Strip all white space to the right of line
-            s = s + "\n" # Add newline to each line as it has just been removed
-            newcontents.append(s) # Store strings that pass the RegEx test in new list
 
         index = 0 # Marks the index after the last index that holds a non-blank string
         curindex = 0
-        for s in newcontents: # Find EOF by finding last non-blank string
+        for s in contents: # Find EOF by finding last non-blank string
             if not re.search("^\s*$", s): # If the string isn't only white space
                 # Update index so it becomes the index after the non-empty string
                 index = curindex + 1
             curindex += 1 # Update current index for next iteration
 
-        for x in range(index, len(newcontents)):
-            del newcontents[index] # Remove all the strings after EOF
+        for x in range(index, len(contents)):
+            del contents[index] # Remove all the strings after EOF
 
-        for s in newcontents:
-            save.write(s)
+        for s in contents:
+            save.write(re.sub("\s*$", "", s))
 
         save.close()
         exit()
