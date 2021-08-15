@@ -69,7 +69,7 @@ def main(stdscr):
         contents = []
         newcontents = [] # Stores new contents list after RegEx
         for y in range (pad.getmaxyx()[0]):
-            contents.append(str(pad.instr(y,0)))
+            contents.append(str(str(pad.instr(y,0)).encode(code)))
         # instr doesn't really work for more than one line and is quite impractical
         pad.clear()
         pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
@@ -79,9 +79,9 @@ def main(stdscr):
             nameFound = False
             while not nameFound:
                 tempfilename = input("Which file name/path do you want? ")
-                answer = input("Are you sure? (y/n) ")
                 validAnswer = False
                 while not validAnswer:
+                    answer = input("Are you sure? (y/n) ")
                     if answer == "y" or answer == "Y":
                         filename = tempfilename
                         nameFound = True
