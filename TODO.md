@@ -1,11 +1,11 @@
 # TODO
-Unfixed:
+## Not finished
 - Vi mode?
 - Read config file for color?
 - Fix program lock-up after a random amout of ctrl-key and any character combination
 - Delete past the current line (semi working)
 
-Fixed:
+## Finished
 - If file passed as argument doesn't exist, create file
 - Fix out of bounds errors
 - Remove options to ungracefully exit (such as ctrl+c)
