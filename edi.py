@@ -112,8 +112,15 @@ def main(stdscr):
         exit()
     # TODO: deleting past the current line
     def delete(): # Doesn't work with the default GNOME terminal
-
-        if cursorx != 0: # preventing crash
+        global pad_x
+        if cursorx > 0: # preventing crash
+            if screenx == 0:
+                if pad_x > 1:
+                    pad_x -= 2
+                    pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+                elif pad_x > 0:
+                    pad_x -= 1
+                    pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
             pad.delch(cursory, cursorx - 1) # Delete the character that is one to the
 
     def back_delete():
@@ -222,6 +229,7 @@ def main(stdscr):
 
         else:
             key_char = str(key)
+            linelength = len(re.sub("\s*$", "", pad.instr(cursory, cursorx).decode("utf-8")))
             if key_char == "\n":
                 if screeny == stdscr.getmaxyx()[0] - 1:
                     pad_y += 1 
@@ -233,6 +241,9 @@ def main(stdscr):
             # expands pad if max x is reached 
             if cursorx == pad.getmaxyx()[1] - 1: 
                 pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
-            pad.addstr(key_char) # Add input to the screen
+            if cursorx + len(key_char) + linelength > pad.getmaxyx()[1] - 1:
+                pad.resize(pad.getmaxyx()[0], cursorx + len(key_char) + linelength + 1)
+            pad.insstr(key_char) # Add input to the screen
+            pad.move(cursory, cursorx + 1)
 if __name__ == '__main__':
     wrapper(main)
