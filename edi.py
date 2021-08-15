@@ -69,7 +69,7 @@ def main(stdscr):
         contents = []
         newcontents = [] # Stores new contents list after RegEx
         for y in range (pad.getmaxyx()[0]):
-            contents.append(str(str(pad.instr(y,0)).encode(code)))
+            contents.append(str(pad.instr(y,0)))
         # instr doesn't really work for more than one line and is quite impractical
         pad.clear()
         pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
@@ -233,12 +233,13 @@ def main(stdscr):
             if key_char == "\n":
                 if screeny == stdscr.getmaxyx()[0] - 1:
                     pad_y += 1 
-                    if cursory == pad.getmaxyx()[0] - 1:
-                        pad.resize(curses.LINES + pad_y, curses.COLS)
-
+                if cursory == pad.getmaxyx()[0] - 1:
+                    pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
+            # scrolls pad to the right if cursor is at right edge
             if screenx == stdscr.getmaxyx()[1] - 1:
                 pad_x += 1
-                if cursorx == pad.getmaxyx()[1] - 1: 
-                    pad.resize(pad.getmaxyx()[0], curses.COLS + pad_x)
+            # expands pad if max x is reached 
+            if cursorx == pad.getmaxyx()[1] - 1: 
+                pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
             pad.addstr(key_char) # Add input to the screen
 wrapper(main)
