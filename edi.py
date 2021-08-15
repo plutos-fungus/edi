@@ -143,8 +143,8 @@ def main(stdscr):
 
         if screenx == stdscr.getmaxyx()[1] - 1:
             pad_x += 1
-            if cursorx == pad.getmaxyx()[1] - 1: 
-                pad.resize(pad.getmaxyx()[0], curses.COLS + pad_x)
+        if cursorx == pad.getmaxyx()[1] - 1: 
+            pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
         newx = cursorx + 1
         pad.move(cursory, newx)
         pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
@@ -163,8 +163,8 @@ def main(stdscr):
         global pad_y
         if screeny == stdscr.getmaxyx()[0] - 1:
             pad_y += 1
-            if cursory == pad.getmaxyx()[0] - 1:
-                pad.resize(curses.LINES + pad_y, pad.getmaxyx()[1])
+        if cursory == pad.getmaxyx()[0] - 1:
+            pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
         newy = cursory + 1
         pad.move(newy, cursorx)
         pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
@@ -216,6 +216,7 @@ def main(stdscr):
             down()
 
         elif key == 410: # Resize event
+            curses.update_lines_cols()
             if curses.LINES > pad.getmaxyx()[0]:
                 pad.resize(curses.LINES, pad.getmaxyx()[1])
             if curses.COLS > pad.getmaxyx()[1]: 
