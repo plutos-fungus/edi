@@ -108,7 +108,9 @@ def main(stdscr):
             del contents[index] # Remove all the strings after EOF
 
         for s in contents:
-            save.write(re.sub("\s*$", "", s))
+            noTrailingWhitespace = re.sub("\s*$", "", s)
+            s = noTrailingWhitespace + "\n"
+            save.write(s)
 
         save.close()
         exit()
@@ -250,14 +252,10 @@ def main(stdscr):
                     pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
                 pad.move(cursory + 1, 0)
             elif key_char == "\t":
-                if cursorx % tabsize == 0 or cursorx == 0:
-                    pad.move(cursory, cursorx + 4) 
-                elif (cursorx - 1) % tabsize == 0:
-                    pad.move(cursory, cursorx + 3)
-                elif (cursorx - 2) % tabsize == 0:
-                    pad.move(cursory, cursorx + 2)
-                elif (cursorx - 3) % tabsize == 0:
-                    pad.move(cursory, cursorx + 1)
+                for x in range(0, tabsize):
+                    if (cursorx - x) % tabsize == 0:
+                        pad.move(cursory, cursorx + tabsize - x)
+                        break
             else:
                 pad.move(cursory, cursorx + 1)
 if __name__ == '__main__':
