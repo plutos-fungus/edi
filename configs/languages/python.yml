@@ -1,5 +1,3 @@
-language_config:
-
 opperators:
   Arithmetic_operators:
     - +
@@ -10,7 +8,7 @@ opperators:
     - //
 
   Assignment_operators:
-    - =
+    - -=
     - +=
     - -=
     - -*=
@@ -19,17 +17,17 @@ opperators:
     - //=
     - -**=
     - -&=
-    - |=
+    - -|=
     - ^=
-    - >>=
-    - <<=
+    - ->>=
+    - -<<=
 
   Comparison_operators:
     - ==
     - -!=
     - >
     - <
-    - >=
+    - ->=
     - <=
 
   Python_Logical_Operators:
@@ -50,8 +48,8 @@ opperators:
     - |
     - ^
     - -~
-    - >>
-    - <<
+    - -->>
+    - --<<
 
 funktions:
   - (

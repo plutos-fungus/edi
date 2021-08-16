@@ -33,17 +33,15 @@ with open(config_file, 'r') as config:
                 VI_mode_on = False
                 break
 
-    for i in language:
-        if i is not None:
-            #print(i)
-            with open(language_files + i, 'r') as language_config:
-                language_config = yaml.load(language_files + i, Loader=SafeLoader)
-                print(language_files + i)
-                #opperators = language_config['language_config']
-                #print(opperators)
+for i in language:
+    if i is not None:
+        #print(i)
+        with open(language_files + i, 'r') as language_config:
+            language_config = yaml.load(language_config, Loader=SafeLoader)
+            print(language_files + i)
+            opperators = language_config['opperators']
 
-
-    for i in theme:
-        if i is not None:
-            pass
-            #print(i)
+for i in theme:
+    if i is not None:
+        pass
+        #print(i)
