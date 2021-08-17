@@ -171,6 +171,15 @@ def main(stdscr):
         newy = cursory + 1
         pad.move(newy, cursorx)
         pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+    
+    def enter():
+        global pad_y
+        pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
+        pad.insertln()
+        if screeny == stdscr.getmaxyx()[0] - 1:
+            pad_y += 1
+        pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
+        pad.move(cursory + 1, 0)
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
@@ -219,6 +228,7 @@ def main(stdscr):
             down()
 
         elif key == 410: # Resize event
+            stdscr.refresh()
             curses.update_lines_cols()
             if curses.LINES > pad.getmaxyx()[0]:
                 pad.resize(curses.LINES, pad.getmaxyx()[1])
@@ -230,6 +240,10 @@ def main(stdscr):
 
         elif str(key) == None:
             pass 
+
+        elif str(key) == "\n":
+            enter()
+
 
         else:
             key_char = str(key)
@@ -245,13 +259,7 @@ def main(stdscr):
 
             pad.insstr(key_char) # Add input to the screen
 
-            if key_char == "\n":
-                if screeny == stdscr.getmaxyx()[0] - 1:
-                    pad_y += 1 
-                if cursory == pad.getmaxyx()[0] - 1:
-                    pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
-                pad.move(cursory + 1, 0)
-            elif key_char == "\t":
+            if key_char == "\t":
                 for x in range(0, tabsize):
                     if (cursorx - x) % tabsize == 0:
                         pad.move(cursory, cursorx + tabsize - x)
