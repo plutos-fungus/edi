@@ -45,7 +45,7 @@ def main(stdscr):
             f = open(filename)
             contents = f.readlines()
             f.close()
-            maxlen = 0 
+            maxlen = 0
             for i in contents:
                 if len(i) > pad.getmaxyx()[1] - 1: # x handling
                     if len(i) > maxlen:
@@ -141,12 +141,12 @@ def main(stdscr):
             newx = cursorx - 1
             pad.move(cursory, newx)
 
-    def right(): 
-        global pad_x 
+    def right():
+        global pad_x
 
         if screenx == stdscr.getmaxyx()[1] - 1:
             pad_x += 1
-        if cursorx == pad.getmaxyx()[1] - 1: 
+        if cursorx == pad.getmaxyx()[1] - 1:
             pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
         newx = cursorx + 1
         pad.move(cursory, newx)
@@ -162,7 +162,7 @@ def main(stdscr):
             newy = cursory - 1
             pad.move(newy, cursorx)
 
-    def down(): 
+    def down():
         global pad_y
         if screeny == stdscr.getmaxyx()[0] - 1:
             pad_y += 1
@@ -219,17 +219,18 @@ def main(stdscr):
             down()
 
         elif key == 410: # Resize event
+            stdscr.refresh()
             curses.update_lines_cols()
             if curses.LINES > pad.getmaxyx()[0]:
                 pad.resize(curses.LINES, pad.getmaxyx()[1])
-            if curses.COLS > pad.getmaxyx()[1]: 
+            if curses.COLS > pad.getmaxyx()[1]:
                 pad.resize(pad.getmaxyx()[0], curses.COLS)
 
         elif key == -1: # No key has been registered
             pass
 
         elif str(key) == None:
-            pass 
+            pass
 
         else:
             key_char = str(key)
@@ -237,8 +238,8 @@ def main(stdscr):
             # scrolls pad to the right if cursor is at right edge
             if screenx == stdscr.getmaxyx()[1] - 1:
                 pad_x += 1
-            # expands pad if max x is reached 
-            if cursorx == pad.getmaxyx()[1] - 1: 
+            # expands pad if max x is reached
+            if cursorx == pad.getmaxyx()[1] - 1:
                 pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
             if cursorx + tabsize + linelength > pad.getmaxyx()[1] - 1:
                 pad.resize(pad.getmaxyx()[0], cursorx + tabsize + linelength + 1)
@@ -247,7 +248,7 @@ def main(stdscr):
 
             if key_char == "\n":
                 if screeny == stdscr.getmaxyx()[0] - 1:
-                    pad_y += 1 
+                    pad_y += 1
                 if cursory == pad.getmaxyx()[0] - 1:
                     pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
                 pad.move(cursory + 1, 0)
