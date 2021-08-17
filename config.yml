@@ -4,6 +4,7 @@
 # and handling of it
 # If any setting is both on and off, it will be set to the first
 # setting in line
+# Test
 
 VI_mode:
   - #y
