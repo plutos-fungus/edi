@@ -175,11 +175,14 @@ def main(stdscr):
     def enter():
         global pad_y
         pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
-        pad.insertln()
+        pad.clrtoeol()
         if screeny == stdscr.getmaxyx()[0] - 1:
             pad_y += 1
-        pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
+            pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
         pad.move(cursory + 1, 0)
+        pad.insertln()
+        pad.insstr(eol)
+
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
@@ -189,6 +192,8 @@ def main(stdscr):
         cursory = cursorlist[0]
         screeny = curses.getsyx()[0]
         screenx = curses.getsyx()[1]
+        eol = re.sub("\s*$", "", pad.instr(cursory, cursorx).decode("utf-8"))
+        linelength = len(eol)
         try:
             key = stdscr.get_wch()
         except curses.error:
@@ -247,7 +252,6 @@ def main(stdscr):
 
         else:
             key_char = str(key)
-            linelength = len(re.sub("\s*$", "", pad.instr(cursory, cursorx).decode("utf-8")))
             # scrolls pad to the right if cursor is at right edge
             if screenx == stdscr.getmaxyx()[1] - 1:
                 pad_x += 1
