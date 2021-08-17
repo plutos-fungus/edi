@@ -5,8 +5,8 @@ import locale # encoding
 import signal # For blocking of ctrl-c interrupt
 #import viMode # Pretty self explanatory
 from fileInteractions import * 
-from keyactions import *
-from keyhandling import handlekeys
+from keyActions import *
+from keyHandling import handlekeys
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
 
 #============================ Ctrl-c handling ===============================#
