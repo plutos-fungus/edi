@@ -1,15 +1,14 @@
-from edi import *
 from keyactions import *
-from fileInteractions import * 
+from fileInteractions import *
 import curses
 
-def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, key):
+def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, filename, key):
 
 	if key == 265: # F1
 		exit() # exit without saving
 
 	elif key == 266: # F2
-		save_close(pad) # Saves the file with the content to a user specified file.
+		save_close(pad, pad_y, pad_x, filename) # Saves the file with the content to a user specified file.
 
 	elif key == 267: # F3
 		pass

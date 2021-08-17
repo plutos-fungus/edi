@@ -1,11 +1,10 @@
-import os
 import sys # for argument handling
 import curses # ncurses
 import re # RegEx
 import locale # encoding
 import signal # For blocking of ctrl-c interrupt
 #import viMode # Pretty self explanatory
-from fileInteractions import *
+from fileInteractions import * 
 from keyactions import *
 from keyhandling import handlekeys
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
@@ -17,22 +16,16 @@ def catch_ctrl_C(signum, frame):
 signal.signal(signal.SIGINT, catch_ctrl_C)
 
 #============================ Initialized values ============================#
-filename = ""
-files = os.listdir()
-pad_y = 0
-pad_x = 0
-tabsize = 4 # tab size used by curses
 
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
 def main(stdscr):
     stdscr.refresh()
-    global files
-    global filename
-    global pad_y
-    global pad_x
-    global tabsize
+    pad_y = 0
+    pad_x = 0
+    tabsize = 4 # tab size used by curses
+
     # Pad init
     pad = curses.newpad(curses.LINES, curses.COLS)
 
@@ -41,11 +34,7 @@ def main(stdscr):
 
 #============================ Argument handling ============================#
     arguments = sys.argv
-    loadfile(pad, arguments)
-
-#==================================== Functions ====================================#
-    
-
+    filename = loadfile(pad, pad_y, pad_x, arguments)
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
@@ -61,8 +50,10 @@ def main(stdscr):
             key = stdscr.get_wch()
         except curses.error:
             key = -1
+        #if key == 266:
+            #save_close(pad, pad_y, pad_x, filename)
 
-        handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, key)
+        handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, filename, key)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,3 @@
-from edi import *
-
 # TODO: deleting past the current line
 def delete(pad, pad_y, pad_x, stdscr, cursory, cursorx, screenx): # Doesn't work with the default GNOME terminal
 	if cursorx > 0: # preventing crash

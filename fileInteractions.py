@@ -1,12 +1,9 @@
-from edi import *
 import os 
 import curses
 import re
 
-def loadfile(pad, args):
-	global pad_y
-	global pad_x
-	global filename
+def loadfile(pad, pad_y, pad_x, args):
+	filename = ""
 	files = os.listdir()
 	if len(args) > 2: 
 		exit("Error: Too many arguments")
@@ -33,11 +30,9 @@ def loadfile(pad, args):
 		else:
 			create = open(filename, "w")
 			create.close()             
+	return filename 
 
-def save_close(pad):
-	global filename
-	global pad_x
-	global pad_y
+def save_close(pad, pad_y, pad_x, filename):
 	contents = []
 	for y in range (pad.getmaxyx()[0]):
 		contents.append(pad.instr(y,0).decode("utf-8"))
