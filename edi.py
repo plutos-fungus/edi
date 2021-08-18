@@ -40,6 +40,7 @@ def main(stdscr):
     arguments = sys.argv
     filename = loadfile(pad, pad_y, pad_x, arguments)
     opperators = getOperators()
+    fileSyntax(pad, opperators)
 
 #==================================== Editing ====================================#
     while True: #Text editor loop

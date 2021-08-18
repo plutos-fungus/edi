@@ -31,7 +31,8 @@ def getOperators():
                 #print(language_files + i)
                 language = i
     for o in opperators:
-        actualopperators.append(re.sub("^-{3}", "", o))
+        o = o + " "
+        actualopperators.append(re.sub("^-{3}", " ", o))
     return actualopperators
 
 def Themestuff():

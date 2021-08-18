@@ -82,6 +82,27 @@ def syntaxHighlight(pad, cursory, cursorx, operators):
 				pad.addstr(o, curses.color_pair(2))
 	pad.move(cursory, cursorx)
 
+def fileSyntax(pad, operators):
+	curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+	curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+	for y in range(pad.getmaxyx()[0] - 1):
+		currline = pad.instr(y, 0).decode("utf-8")
+		eol = len(currline)
+		for o in operators:
+			oposes = []
+			for x in range(eol):
+				foundx = currline.find(o, x, eol)
+				if foundx != -1: 
+					oposes.append(foundx)
+				else:
+					break
+			if len(oposes) != 0:
+				for xpos in oposes:
+					pad.move(y, xpos)
+					pad.addstr(o, curses.color_pair(2))
+		pad.move(0, 0)
+
+
 	# orposes = []
 	# for x in range(eol):
 	# 	foundx = currline.find(" or ", x, eol)
