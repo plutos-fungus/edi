@@ -2,7 +2,7 @@ import os
 import curses
 import re
 
-def loadfile(pad, pad_y, pad_x, args):
+def loadfile(pad, padposition, args):
 	filename = ""
 	files = os.listdir()
 	if len(args) > 2: 
@@ -20,25 +20,25 @@ def loadfile(pad, pad_y, pad_x, args):
 						maxlen = len(i)
 						pad.resize(pad.getmaxyx()[0], maxlen)
 				if curses.getsyx()[0] == curses.LINES - 1: #y handling
-					pad_y += 1
-					pad.resize(pad.getmaxyx()[0] + pad_y, pad.getmaxyx()[1])
+					padposition.y += 1
+					pad.resize(pad.getmaxyx()[0] + padposition.y, pad.getmaxyx()[1])
 				pad.addstr(i)
-				pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
-			pad_y = 0
-			pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
+				pad.refresh(padposition.y, padposition.x, 0, 0, curses.LINES - 1, curses.COLS - 1)
+			padposition.y = 0
+			pad.refresh(padposition.y, padposition.x, 0, 0, curses.LINES - 1, curses.COLS - 1)
 			pad.move(0, 0)
 		else:
 			create = open(filename, "w")
 			create.close()             
 	return filename 
 
-def save_close(pad, pad_y, pad_x, filename):
+def save_close(pad, padposition, filename):
 	contents = []
 	for y in range (pad.getmaxyx()[0]):
 		contents.append(pad.instr(y,0).decode("utf-8"))
 			# instr doesn't really work for more than one line and is quite impractical
 	pad.clear()
-	pad.refresh(pad_y, pad_x, 0, 0, curses.LINES - 1, curses.COLS - 1)
+	pad.refresh(padposition.y, padposition.x, 0, 0, curses.LINES - 1, curses.COLS - 1)
 	curses.endwin()
 
 	if filename == "": # Ask about the name of the file if the file isn't one that has been opened

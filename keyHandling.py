@@ -1,14 +1,14 @@
 from keyActions import *
 from fileInteractions import *
 import curses
-
-def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, filename, key, opperators):
+from globalDefinitions import PadPos
+def handlekeys(pad, padposition, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, filename, key, opperators):
 
 	if key == 265: # F1
 		exit() # exit without saving
 
 	elif key == 266: # F2
-		save_close(pad, pad_y, pad_x, filename) # Saves the file with the content to a user specified file.
+		save_close(pad, padposition, filename) # Saves the file with the content to a user specified file.
 
 	elif key == 267: # F3
 		pass
@@ -18,23 +18,23 @@ def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, li
 
 	elif key == 263: # Backspace
 	# Doesn't work with the default GNOME terminal //TODO make it universal
-		delete(pad, pad_y, pad_x, stdscr, cursory, cursorx, screenx)
+		padposition.x = delete(pad, padposition, stdscr, cursory, cursorx, screenx)
 
 	elif key == 330: #Delete-key
 		back_delete(pad, cursory, cursorx)
 
 #==================================== Cursor keys ====================================#
 	elif key == 260: # Left key
-		left(pad, pad_y, pad_x, stdscr, cursory, cursorx, screenx)
+		padposition.x = left(pad, padposition, stdscr, cursory, cursorx, screenx)
 
 	elif key == 261: # Right key
-		right(pad, pad_y, pad_x, stdscr, cursory, cursorx, screenx)
+		padposition.x = right(pad, padposition, stdscr, cursory, cursorx, screenx)
 
 	elif key == 259: # Up key
-		up(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny)
+		padposition.y = up(pad, padposition, stdscr, cursory, cursorx, screeny)
 
 	elif key == 258: # Down key
-		down(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny)
+		padposition.y = down(pad, padposition, stdscr, cursory, cursorx, screeny)
 
 	elif key == 410: # Resize event
 		stdscr.refresh()
@@ -51,14 +51,13 @@ def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, li
 		pass
 
 	elif str(key) == "\n":
-		enter(pad, pad_y, pad_x, stdscr, cursory, screeny, eol)
-
+		padposition.y = enter(pad, padposition, stdscr, cursory, screeny, eol)
 
 	else:
 		key_char = str(key)
 		# scrolls pad to the right if cursor is at right edge
 		if screenx == stdscr.getmaxyx()[1] - 1:
-			pad_x += 1
+			padposition.x += 1
 		# expands pad if max x is reached
 		if cursorx == pad.getmaxyx()[1] - 1:
 			pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
@@ -73,4 +72,4 @@ def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, li
 					cursorx = cursorx + tabsize - x
 		else:
 			cursorx += + 1
-		# syntaxHighlight(pad, cursory, cursorx, opperators)
+		syntaxHighlight(pad, padposition, stdscr, cursory, cursorx, opperators)
