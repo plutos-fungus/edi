@@ -6,7 +6,7 @@ from yaml.loader import SafeLoader
 # Please
 
 #========================= Viables and paths =========================#
-config_file = 'config.yml'
+config_file = 'configs/config.yml'
 language_files = 'configs/languages/'
 themes_files = 'configs/theme/'
 VI_mode_on = False
