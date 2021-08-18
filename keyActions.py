@@ -23,6 +23,7 @@ def left(pad, pad_y, pad_x, stdscr, cursory, cursorx, screenx):
 				pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
 		newx = cursorx - 1
 		pad.move(cursory, newx)
+	return pad_x
 
 def right(pad, pad_y, pad_x, stdscr, cursory, cursorx, screenx):
 	if screenx == stdscr.getmaxyx()[1] - 1:
@@ -32,6 +33,7 @@ def right(pad, pad_y, pad_x, stdscr, cursory, cursorx, screenx):
 	newx = cursorx + 1
 	pad.move(cursory, newx)
 	pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+	return pad_x
 
 def up(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny):
 	if cursory != 0:
@@ -41,6 +43,7 @@ def up(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny):
 				pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
 		newy = cursory - 1
 		pad.move(newy, cursorx)
+	return pad_y
 
 def down(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny):
 	if screeny == stdscr.getmaxyx()[0] - 1:
@@ -50,6 +53,7 @@ def down(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny):
 	newy = cursory + 1
 	pad.move(newy, cursorx)
 	pad.refresh(pad_y, pad_x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+	return pad_y
 
 def enter(pad, pad_y, pad_x, stdscr, cursory, screeny, eol):
 	pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
@@ -60,6 +64,7 @@ def enter(pad, pad_y, pad_x, stdscr, cursory, screeny, eol):
 	pad.move(cursory + 1, 0)
 	pad.insertln()
 	pad.insstr(eol)
+	return pad_y
 
 def syntaxHighlight(pad, cursory, cursorx, operators): 
 	curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)

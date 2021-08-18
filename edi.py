@@ -40,7 +40,7 @@ def main(stdscr):
     arguments = sys.argv
     filename = loadfile(pad, pad_y, pad_x, arguments)
     opperators = getOperators()
-    fileSyntax(pad, opperators)
+    #fileSyntax(pad, opperators)
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
@@ -52,7 +52,7 @@ def main(stdscr):
         screenx = curses.getsyx()[1]
         eol = re.sub("\s*$", "", pad.instr(cursory, cursorx).decode("utf-8"))
         linelength = len(eol)
-        syntaxHighlight(pad, cursory, cursorx, opperators)
+        #syntaxHighlight(pad, cursory, cursorx, opperators)
         try:
             key = stdscr.get_wch()
         except curses.error:

@@ -73,4 +73,4 @@ def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, li
 					cursorx = cursorx + tabsize - x
 		else:
 			cursorx += + 1
-		syntaxHighlight(pad, cursory, cursorx, opperators)
+		# syntaxHighlight(pad, cursory, cursorx, opperators)
