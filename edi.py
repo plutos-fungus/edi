@@ -7,6 +7,7 @@ import signal # For blocking of ctrl-c interrupt
 from fileInteractions import * 
 from keyActions import *
 from keyHandling import handlekeys
+from config_handler import *
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
 
 #============================ Ctrl-c handling ===============================#
@@ -46,6 +47,7 @@ def main(stdscr):
         screenx = curses.getsyx()[1]
         eol = re.sub("\s*$", "", pad.instr(cursory, cursorx).decode("utf-8"))
         linelength = len(eol)
+        #print(colors)
         try:
             key = stdscr.get_wch()
         except curses.error:
