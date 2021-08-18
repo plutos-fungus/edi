@@ -47,7 +47,7 @@ def main(stdscr):
         screenx = curses.getsyx()[1]
         eol = re.sub("\s*$", "", pad.instr(cursory, cursorx).decode("utf-8"))
         linelength = len(eol)
-        #print(colors)
+        red = colors
         try:
             key = stdscr.get_wch()
         except curses.error:
