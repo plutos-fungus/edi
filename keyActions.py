@@ -1,3 +1,4 @@
+import curses
 # TODO: deleting past the current line
 def delete(pad, pad_y, pad_x, stdscr, cursory, cursorx, screenx): # Doesn't work with the default GNOME terminal
 	if cursorx > 0: # preventing crash
@@ -59,3 +60,45 @@ def enter(pad, pad_y, pad_x, stdscr, cursory, screeny, eol):
 	pad.move(cursory + 1, 0)
 	pad.insertln()
 	pad.insstr(eol)
+
+def syntaxHighlight(pad, cursory, cursorx, operators): 
+	curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+	curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+	currline = pad.instr(cursory, 0).decode("utf-8") # Get contents of current line 
+	eol = len(currline)
+	pad.move(cursory, 0)
+	pad.addstr(currline)
+	for o in operators:
+		oposes = []
+		for x in range(eol):
+			foundx = currline.find(o, x, eol)
+			if foundx != -1: 
+				oposes.append(foundx)
+			else: 
+				break
+		if len(oposes) != 0:
+			for xpos in oposes:
+				pad.move(cursory, xpos)
+				pad.addstr(o, curses.color_pair(2))
+	pad.move(cursory, cursorx)
+
+	# orposes = []
+	# for x in range(eol):
+	# 	foundx = currline.find(" or ", x, eol)
+	# 	if foundx != -1:
+	# 		orposes.append(foundx)
+	# 	else:
+	# 		break
+	# pad.move(cursory, 0)
+	# pad.addstr(currline)	
+	# if len(orposes) != 0:
+	# 	for xpos in orposes:
+	# 		pad.move(cursory, xpos)
+	# 		pad.addstr(" or ", curses.color_pair(2))
+	# pad.move(cursory, cursorx)
+
+
+
+
+
+

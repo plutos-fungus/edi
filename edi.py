@@ -22,6 +22,9 @@ locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
 def main(stdscr):
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
     stdscr.refresh()
     pad_y = 0
     pad_x = 0
@@ -36,6 +39,7 @@ def main(stdscr):
 #============================ Argument handling ============================#
     arguments = sys.argv
     filename = loadfile(pad, pad_y, pad_x, arguments)
+    opperators = getOperators()
 
 #==================================== Editing ====================================#
     while True: #Text editor loop
@@ -47,15 +51,15 @@ def main(stdscr):
         screenx = curses.getsyx()[1]
         eol = re.sub("\s*$", "", pad.instr(cursory, cursorx).decode("utf-8"))
         linelength = len(eol)
-        red = colors
+        syntaxHighlight(pad, cursory, cursorx, opperators)
         try:
             key = stdscr.get_wch()
         except curses.error:
             key = -1
         #if key == 266:
             #save_close(pad, pad_y, pad_x, filename)
-
-        handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, filename, key)
+        handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, filename, key, opperators)
+        
 
 
 if __name__ == '__main__':

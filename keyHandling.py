@@ -2,7 +2,7 @@ from keyActions import *
 from fileInteractions import *
 import curses
 
-def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, filename, key):
+def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, linelength, eol, tabsize, filename, key, opperators):
 
 	if key == 265: # F1
 		exit() # exit without saving
@@ -70,7 +70,7 @@ def handlekeys(pad, pad_y, pad_x, stdscr, cursory, cursorx, screeny, screenx, li
 		if key_char == "\t":
 			for x in range(0, tabsize):
 				if (cursorx - x) % tabsize == 0:
-					pad.move(cursory, cursorx + tabsize - x)
-					break
+					cursorx = cursorx + tabsize - x
 		else:
-			pad.move(cursory, cursorx + 1)
+			cursorx += + 1
+		syntaxHighlight(pad, cursory, cursorx, opperators)
