@@ -27,6 +27,7 @@ def getOperators():
 
 
     actualopperators = []
+    opperators = []
     for i in language:
         if i is not None:
             #print(i)
@@ -38,10 +39,13 @@ def getOperators():
                     #print(language_files + i)
                     language = i
             except FileNotFoundError:
-                opperators = []
-    for o in opperators:
-        o = o + " "
-        actualopperators.append(re.sub("^-{3}", " ", o))
+                pass 
+    if len(opperators) != 0:
+        for o in opperators:
+            o = o + " "
+            actualopperators.append(re.sub("^-{3}", " ", o))
+    else: 
+        actualopperators.append(None)
     return actualopperators
 
 def Themestuff():
