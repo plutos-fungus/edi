@@ -7,9 +7,9 @@ from yaml.loader import SafeLoader
 
 #========================= Viables and paths =========================#
 def getOperators():
-    config_file = '~/.config/edi/config.yml'
-    language_files = '~/.config/edi/languages/'
-    themes_files = '~/.config/edi/theme/'
+    config_file = 'configs/config.yml'
+    language_files = 'configs/languages/'
+    themes_files = 'configs/theme/'
     VI_mode_on = False
     language = ""
 
@@ -44,9 +44,9 @@ def getOperators():
         for o in opperators:
             o = o + " "
             actualopperators.append(re.sub("^-{3}", " ", o))
+        return actualopperators
     else: 
-        actualopperators.append(None)
-    return actualopperators
+        return None 
 
 def Themestuff():
     for i in theme:
