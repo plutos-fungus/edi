@@ -38,7 +38,7 @@ def main(stdscr):
 #============================ Argument handling ============================#
     arguments = sys.argv
     filename = loadfile(pad, myPadPos, arguments)
-    opperators = getOperators()
+    opperators = getSyntax(filename)
     fileSyntax(pad, opperators)
 
 #==================================== Editing ====================================#

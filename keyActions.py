@@ -1,4 +1,5 @@
 import curses
+import re 
 from globalDefinitions import PadPos
 # TODO: deleting past the current line
 def delete(pad, padposition, stdscr, cursory, cursorx, screenx): # Doesn't work with the default GNOME terminal
@@ -71,6 +72,7 @@ def enter(pad, padposition, stdscr, cursory, screeny, eol):
 def syntaxHighlight(pad, padposition, stdscr, cursory, cursorx, operators): 
 	curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
 	curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+	curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
 	if operators[0] != None:
 		if cursory == pad.getmaxyx()[0] - 1:
 			pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
@@ -92,6 +94,15 @@ def syntaxHighlight(pad, padposition, stdscr, cursory, cursorx, operators):
 				for xpos in oposes:
 					pad.move(cursory, xpos)
 					pad.addstr(o, curses.color_pair(2))
+		# regex time! 
+		pad.move(cursory, 0)
+		funcs = re.findall("\w*(.*)", currline)
+		for f in funcs:
+			s = re.sub("\(\w*\)(.*)", "\1", f)
+			for x in range(eol):
+				foundx = currline.find(s, x, eol)
+				if foundx != -1: 
+					pad.addstr(s, curses.color_pair(3))
 	pad.move(cursory, cursorx)
 
 def fileSyntax(pad, operators):

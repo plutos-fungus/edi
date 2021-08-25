@@ -9,10 +9,5 @@ VI_mode:
   - #y
   - n
 
-language:
-  - #c.yml
-  - #c++.yml
-  - python.yml
-
 theme:
   - toast.yml

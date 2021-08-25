@@ -6,47 +6,47 @@ from yaml.loader import SafeLoader
 # Please
 
 #========================= Viables and paths =========================#
-def getOperators():
+def getSyntax(filename):
     config_file = 'configs/config.yml'
     language_files = 'configs/languages/'
     themes_files = 'configs/theme/'
     VI_mode_on = False
     language = ""
+    theme = []
 
     #========================= opening the files =========================#
     try:
         with open(config_file, 'r') as config:
             config = yaml.load(config, Loader=SafeLoader)
             VI_mode = config['VI_mode']
-            language = config['language']
             theme = config['theme']
     except FileNotFoundError: 
         VI_mode = "n"
         language = []
-        theme = None # TODO: if no theme is set, don't run Themestuff.
+        theme.append(None) # TODO: if no theme is set, don't run Themestuff.
 
 
     actualopperators = []
     opperators = []
-    for i in language:
-        if i is not None:
-            #print(i)
-            try: 
-                with open(language_files + i, 'r') as language_config:
-                    language_config = yaml.load(language_config, Loader=SafeLoader)
-                    opperators = language_config['opperators']
-                    #print("=== Language ===")
-                    #print(language_files + i)
-                    language = i
-            except FileNotFoundError:
-                pass 
+    if re.search(".*\.py", filename): #TODO: Implement dictionary switch 
+        language = "python"
+
+    try: 
+        with open(language_files + language + ".yml", 'r') as language_config:
+            language_config = yaml.load(language_config, Loader=SafeLoader)
+            opperators = language_config['opperators']
+            #print("=== Language ===")
+            #print(language_files + i)
+    except FileNotFoundError:
+        pass 
     if len(opperators) != 0:
         for o in opperators:
             o = o + " "
             actualopperators.append(re.sub("^-{3}", " ", o))
         return actualopperators
     else: 
-        return None 
+        opperators.append(None)
+        return opperators
 
 def Themestuff():
     for i in theme:
