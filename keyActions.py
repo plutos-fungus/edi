@@ -96,13 +96,16 @@ def syntaxHighlight(pad, padposition, stdscr, cursory, cursorx, operators):
 					pad.addstr(o, curses.color_pair(2))
 		# regex time! 
 		pad.move(cursory, 0)
-		funcs = re.findall("\w*(.*)", currline)
+		funcs = re.findall("\w*\(.*\)", currline)
 		for f in funcs:
-			s = re.sub("\(\w*\)(.*)", "\1", f)
-			for x in range(eol):
-				foundx = currline.find(s, x, eol)
-				if foundx != -1: 
-					pad.addstr(s, curses.color_pair(3))
+			p = re.compile("(\w*)\([^\)]*\)")
+			m = p.findall(f)
+			for i in m: 
+				for x in range(eol):
+					foundx = currline.find(i + "(", x, eol) # Hacky fix for detecting just a word as a function. TODO: actually fix 
+					if foundx != -1: 
+						pad.move(cursory, foundx) 
+						pad.addstr(i, curses.color_pair(3))
 	pad.move(cursory, cursorx)
 
 def fileSyntax(pad, operators):
