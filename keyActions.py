@@ -1,86 +1,86 @@
 import curses
 import re 
-from globalDefinitions import PadPos
+from globalDefinitions import *
 # TODO: deleting past the current line
-def delete(pad, padposition, stdscr, cursory, cursorx, screenx): # Doesn't work with the default GNOME terminal
-	if cursorx > 0: # preventing crash
-		if screenx == 0:
-			if padposition.x > 1:
-				padposition.x -= 2
-				pad.refresh(padposition.y, padposition.x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
-			elif padposition.x > 0:
-				padposition.x -= 1
-				pad.refresh(padposition.y, padposition.x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
-		pad.delch(cursory, cursorx - 1) # Delete the character that is one to the
-	return padposition.x
+def delete(pad, myPad, stdscr, cursor): # Doesn't work with the default GNOME terminal
+	if cursor.px > 0: # preventing crash
+		if cursor.sx == 0:
+			if myPad.posx > 1:
+				myPad.posx -= 2
+				pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+			elif myPad.posx > 0:
+				myPad.posx -= 1
+				pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+		pad.delch(cursor.py, cursor.px - 1) # Delete the character that is one to the
+	return myPad.posx
 
-def back_delete(pad, cursory, cursorx):
-	pad.delch(cursory, cursorx) # Delete the character to the righ. This also
+def back_delete(pad, cursor):
+	pad.delch(cursor.py, cursor.px) # Delete the character to the righ. This also
 	# moves the other characters on that line one closer to the cursor
 
-def left(pad, padposition, stdscr, cursory, cursorx, screenx):
-	if cursorx > 0:
-		if screenx == 0:
-			if padposition.x > 0:
-				padposition.x -= 1
-				pad.refresh(padposition.y, padposition.x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
-		newx = cursorx - 1
-		pad.move(cursory, newx)
-	return padposition.x
+def left(pad, myPad, stdscr, cursor):
+	if cursor.px > 0:
+		if cursor.sx == 0:
+			if myPad.posx > 0:
+				myPad.posx -= 1
+				pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+		newx = cursor.px - 1
+		pad.move(cursor.py, newx)
+	return myPad.posx
 
-def right(pad, padposition, stdscr, cursory, cursorx, screenx):
-	if screenx == stdscr.getmaxyx()[1] - 1:
-		padposition.x += 1
-	if cursorx == pad.getmaxyx()[1] - 1:
+def right(pad, myPad, stdscr, cursor):
+	if cursor.sx == stdscr.getmaxyx()[1] - 1:
+		myPad.posx += 1
+	if cursor.px == pad.getmaxyx()[1] - 1:
 		pad.resize(pad.getmaxyx()[0], pad.getmaxyx()[1] + 1)
-	newx = cursorx + 1
-	pad.move(cursory, newx)
-	pad.refresh(padposition.y, padposition.x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
-	return padposition.x
+	newx = cursor.px + 1
+	pad.move(cursor.py, newx)
+	pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+	return myPad.posx
 
-def up(pad, padposition, stdscr, cursory, cursorx, screeny):
-	if cursory != 0:
-		if screeny == 0:
-			if padposition.y != 0:
-				padposition.y -= 1
-				pad.refresh(padposition.y, padposition.x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
-		newy = cursory - 1
-		pad.move(newy, cursorx)
-	return padposition.y
+def up(pad, myPad, stdscr, cursor):
+	if cursor.py != 0:
+		if cursor.sy == 0:
+			if myPad.posy != 0:
+				myPad.posy -= 1
+				pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+		newy = cursor.py - 1
+		pad.move(newy, cursor.px)
+	return myPad.posy
 
-def down(pad, padposition, stdscr, cursory, cursorx, screeny):
-	if screeny == stdscr.getmaxyx()[0] - 1:
-		padposition.y += 1
-	if cursory == pad.getmaxyx()[0] - 1:
+def down(pad, myPad, stdscr, cursor):
+	if cursor.sy == stdscr.getmaxyx()[0] - 1:
+		myPad.posy += 1
+	if cursor.py == pad.getmaxyx()[0] - 1:
 		pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
-	newy = cursory + 1
-	pad.move(newy, cursorx)
-	pad.refresh(padposition.y, padposition.x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
-	return padposition.y
+	newy = cursor.py + 1
+	pad.move(newy, cursor.px)
+	pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+	return myPad.posy
 
-def enter(pad, padposition, stdscr, cursory, screeny, eol):
+def enter(pad, myPad, stdscr, cursor, eol):
 	pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
 	pad.clrtoeol()
-	if screeny == stdscr.getmaxyx()[0] - 1:
-		padposition.y += 1
-		pad.refresh(padposition.y, padposition.x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
-	pad.move(cursory + 1, 0)
+	if cursor.sy == stdscr.getmaxyx()[0] - 1:
+		myPad.posy += 1
+		pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+	pad.move(cursor.py + 1, 0)
 	pad.insertln()
 	pad.insstr(eol)
-	return padposition.y
+	return myPad.posy
 
-def syntaxHighlight(pad, padposition, stdscr, cursory, cursorx, operators): 
+def syntaxHighlight(pad, myPad, stdscr, cursor, operators): 
 	curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
 	curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
 	curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
 	if operators[0] != None:
-		if cursory == pad.getmaxyx()[0] - 1:
+		if cursor.py == pad.getmaxyx()[0] - 1:
 			pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
-			pad.refresh(padposition.y, padposition.x, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
+			pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
 
-		currline = pad.instr(cursory, 0).decode("utf-8") # Get contents of current line 
+		currline = pad.instr(cursor.py, 0).decode("utf-8") # Get contents of current line 
 		eol = len(currline)
-		pad.move(cursory, 0)
+		pad.move(cursor.py, 0)
 		pad.addstr(currline)
 		for o in operators:
 			oposes = []
@@ -92,10 +92,10 @@ def syntaxHighlight(pad, padposition, stdscr, cursory, cursorx, operators):
 					break
 			if len(oposes) != 0:
 				for xpos in oposes:
-					pad.move(cursory, xpos)
+					pad.move(cursor.py, xpos)
 					pad.addstr(o, curses.color_pair(2))
 		# regex time! 
-		pad.move(cursory, 0)
+		pad.move(cursor.py, 0)
 		funcs = re.findall("\w*\(.*\)", currline)
 		for f in funcs:
 			p = re.compile("(\w*)\([^\)]*\)")
@@ -104,9 +104,9 @@ def syntaxHighlight(pad, padposition, stdscr, cursory, cursorx, operators):
 				for x in range(eol):
 					foundx = currline.find(i + "(", x, eol) # Hacky fix for detecting just a word as a function. TODO: actually fix 
 					if foundx != -1: 
-						pad.move(cursory, foundx) 
+						pad.move(cursor.py, foundx) 
 						pad.addstr(i, curses.color_pair(3))
-	pad.move(cursory, cursorx)
+	pad.move(cursor.py, cursor.px)
 
 def fileSyntax(pad, operators):
 	curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
