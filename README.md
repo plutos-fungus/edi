@@ -6,7 +6,7 @@ A simple text editor using python and curses.
 Use of this software as a daily driver is not recomended; it's just a hobby project
 
 ### Here it is running in a terminal
-![image](https://user-images.githubusercontent.com/71628935/130058950-aa470aae-c994-4867-898e-713c49518bad.png)
+![image](https://user-images.githubusercontent.com/71628935/131351288-e8454c43-3dde-4243-b9e0-0895c798881f.png)
 
 ## Known supported terminal emulators
 - Xfce terminal
