@@ -14,7 +14,7 @@ def getSyntax(filename):
     VI_mode_on = False
     language = ""
     theme = []
-    ending = ""
+    #ending = ""
 
     #========================= opening the files =========================#
     try:
@@ -59,9 +59,9 @@ def Themestuff():
                 #print("=== theme ===")
                 #print(themes_files + i)
 
-def Endings():
-    with open(fileendings, 'r') as endings:
-        print(endings)
+#def Endings():
+    #with open(fileendings, 'r') as endings:
+        #print(endings)
 
 #========================= Setting VI mode =========================#
 def vimode():
@@ -79,4 +79,4 @@ def vimode():
             elif i == "n" and i == "y":
                 VI_mode_on = False
                 break
-Endings()
+#Endings()
