@@ -4,17 +4,16 @@ import yaml
 from yaml.loader import SafeLoader
 # Handle the config-file
 # Please
-
+fileendings = 'configs/fileendings/files.yml'
 #========================= Viables and paths =========================#
 def getSyntax(filename):
     config_file = 'configs/config.yml'
     language_files = 'configs/languages/'
     themes_files = 'configs/theme/'
-    fileendings = 'configs/fileendings/files.yml'
     VI_mode_on = False
     language = ""
     theme = []
-    #ending = ""
+    ending = ""
 
     #========================= opening the files =========================#
     try:
@@ -59,9 +58,11 @@ def Themestuff():
                 #print("=== theme ===")
                 #print(themes_files + i)
 
-#def Endings():
-    #with open(fileendings, 'r') as endings:
-        #print(endings)
+def Endings():
+    with open(fileendings, 'r') as endings:
+        endings = yaml.load(endings, Loader=SafeLoader)
+        files = endings['files']
+        print(files)
 
 #========================= Setting VI mode =========================#
 def vimode():
@@ -79,4 +80,4 @@ def vimode():
             elif i == "n" and i == "y":
                 VI_mode_on = False
                 break
-#Endings()
+Endings()
