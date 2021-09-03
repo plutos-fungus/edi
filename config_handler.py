@@ -62,7 +62,7 @@ def Endings():
     with open(fileendings, 'r') as endings:
         endings = yaml.load(endings, Loader=SafeLoader)
         files = endings['files']
-        print(files)
+
 
 #========================= Setting VI mode =========================#
 def vimode():
@@ -80,4 +80,3 @@ def vimode():
             elif i == "n" and i == "y":
                 VI_mode_on = False
                 break
-Endings()
