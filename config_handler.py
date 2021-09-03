@@ -4,7 +4,6 @@ import yaml
 from yaml.loader import SafeLoader
 # Handle the config-file
 # Please
-global fileendings
 fileendings = 'configs/fileendings/files.yml'
 #========================= Viables and paths =========================#
 def getSyntax(filename):
