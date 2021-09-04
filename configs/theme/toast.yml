@@ -1,6 +1,8 @@
 
 red: 
   - B80016
+blue:
+  - 0021FF
 orange: 
   - E7DE00
 green: 
@@ -10,13 +12,13 @@ yellow:
 purple: 
   - 7F00E7
 cyan: 
-  - 00E7D1
+  - 00FFEA
 magenta: 
   - E70080
 white: 
   - FFFFFF
 black: 
-  - 000000
+  - "000000"
 
 foreground: 
   - FFFFFF

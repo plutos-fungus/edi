@@ -1,6 +1,7 @@
 import sys
 import re
 import yaml
+from globalDefinitions import *
 from yaml.loader import SafeLoader
 # Handle the config-file
 # Please
@@ -51,8 +52,8 @@ def getSyntax(filename):
         return opperators
 
 def Themestuff():
-    myColors = Themecolors()
-    myColors.getcolors(themes_files, theme)
+    global theme
+    myColors = Themergb(themes_files, theme)
     return myColors
 
 def Endings():
