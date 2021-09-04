@@ -1,7 +1,6 @@
 # TODO
 ## Not finished
 - Vi mode?
-- Read config file for color?
 - Fix program lock-up after a random amout of ctrl-key and any character combination
 - Delete past the current line (semi working)
 
@@ -13,3 +12,4 @@
 - Loading files bigger than the terminal emulator
 - UTF-8 support and proper string conversion when saving
 - Moving functions from edi.py to separate handling files
+- Read config file for color?
