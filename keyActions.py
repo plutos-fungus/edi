@@ -122,4 +122,19 @@ def fileSyntax(pad, operators):
 					for xpos in oposes:
 						pad.move(y, xpos)
 						pad.addstr(o, curses.color_pair(2))
+
+	for y in range(pad.getmaxyx()[0] - 1):
+		currline = pad.instr(y, 0).decode("utf-8")
+		eol = len(currline)
+		funcs = re.findall("\w*\(.*\)", currline)
+		for f in funcs:
+			p = re.compile("(\w*)\([^\)]*\)")
+			m = p.findall(f)
+			for i in m: 
+				for x in range(eol):
+					foundx = currline.find(i + "(", x, eol) # Hacky fix for detecting just a word as a function. TODO: actually fix 
+					if foundx != -1: 
+						pad.move(y, foundx) 
+						pad.addstr(i, curses.color_pair(3))
+
 	pad.move(0, 0)
