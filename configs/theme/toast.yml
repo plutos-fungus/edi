@@ -1,13 +1,26 @@
-colors:
-  - red: B80016
-  - orange: E7DE00
-  - green: 00E738
-  - yellow: D7E700
-  - purple: 7F00E7
-  - cyan: 00E7D1
-  - magenta: E70080
-  - white: FFFFFF
-  - black: 000000
 
-background: 4E0053
-cursor: FFFFFF
+red: 
+  - B80016
+orange: 
+  - E7DE00
+green: 
+  - 00E738
+yellow: 
+  - D7E700
+purple: 
+  - 7F00E7
+cyan: 
+  - 00E7D1
+magenta: 
+  - E70080
+white: 
+  - FFFFFF
+black: 
+  - 000000
+
+foreground: 
+  - FFFFFF
+background: 
+  - 4E0053
+cursor: 
+  - FFFFFF

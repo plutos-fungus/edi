@@ -10,6 +10,7 @@ from keyHandling import handlekeys
 from config_handler import *
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
 from globalDefinitions import *
+from scipy.interpolate import interp1d
 #============================ Ctrl-c handling ===============================#
 def catch_ctrl_C(signum, frame):
     pass
@@ -40,6 +41,9 @@ def main(stdscr):
     arguments = sys.argv
     filename = loadfile(pad, myPad, arguments)
     opperators = getSyntax(filename)
+    myColors = Themestuff()
+    m = interp1d([0,255][0,1000])
+    
     fileSyntax(pad, opperators)
 
 #==================================== Editing ====================================#

@@ -5,14 +5,15 @@ from yaml.loader import SafeLoader
 # Handle the config-file
 # Please
 fileendings = 'configs/fileendings/files.yml'
+theme = []
+themes_files = 'configs/theme/'
 #========================= Viables and paths =========================#
 def getSyntax(filename):
+    global theme
     config_file = 'configs/config.yml'
     language_files = 'configs/languages/'
-    themes_files = 'configs/theme/'
     VI_mode_on = False
     language = ""
-    theme = []
     ending = ""
 
     #========================= opening the files =========================#
@@ -50,13 +51,9 @@ def getSyntax(filename):
         return opperators
 
 def Themestuff():
-    for i in theme:
-        if i is not None:
-            with open(themes_files + i, 'r') as themes:
-                themes = yaml.load(themes, Loader=SafeLoader)
-                colors = themes['colors']
-                #print("=== theme ===")
-                #print(themes_files + i)
+    myColors = Themecolors()
+    myColors.getcolors(themes_files, theme)
+    return myColors
 
 def Endings():
     with open(fileendings, 'r') as endings:
