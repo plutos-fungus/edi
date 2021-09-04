@@ -70,9 +70,6 @@ def enter(pad, myPad, stdscr, cursor, eol):
 	return myPad.posy
 
 def syntaxHighlight(pad, myPad, stdscr, cursor, operators): 
-	curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-	curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
-	curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
 	if operators[0] != None:
 		if cursor.py == pad.getmaxyx()[0] - 1:
 			pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
@@ -81,7 +78,7 @@ def syntaxHighlight(pad, myPad, stdscr, cursor, operators):
 		currline = pad.instr(cursor.py, 0).decode("utf-8") # Get contents of current line 
 		eol = len(currline)
 		pad.move(cursor.py, 0)
-		pad.addstr(currline)
+		pad.addstr(currline, curses.color_pair(1))
 		for o in operators:
 			oposes = []
 			for x in range(eol):
@@ -109,8 +106,6 @@ def syntaxHighlight(pad, myPad, stdscr, cursor, operators):
 	pad.move(cursor.py, cursor.px)
 
 def fileSyntax(pad, operators):
-	curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-	curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
 	if operators[0] != None:
 		for y in range(pad.getmaxyx()[0] - 1):
 			currline = pad.instr(y, 0).decode("utf-8")

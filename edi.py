@@ -10,6 +10,7 @@ from keyHandling import handlekeys
 from config_handler import *
 from curses import wrapper # wrapper to run ncurses with standard error handling and stuff
 from globalDefinitions import *
+
 #============================ Ctrl-c handling ===============================#
 def catch_ctrl_C(signum, frame):
     pass
@@ -17,7 +18,6 @@ def catch_ctrl_C(signum, frame):
 signal.signal(signal.SIGINT, catch_ctrl_C)
 
 #============================ Initialized values ============================#
-
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
@@ -40,6 +40,18 @@ def main(stdscr):
     arguments = sys.argv
     filename = loadfile(pad, myPad, arguments)
     opperators = getSyntax(filename)
+
+#============================ Color setup ==================================#
+    myColors = Themestuff()  
+    colors_list = myColors.parseColors()
+
+    for x in range(8):
+        curses.init_color(x, colors_list[x][0], colors_list[x][1], colors_list[x][2])
+
+    curses.init_color(curses.COLOR_WHITE, colors_list[7][0], colors_list[7][1], colors_list[7][2])
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
     fileSyntax(pad, opperators)
 
 #==================================== Editing ====================================#

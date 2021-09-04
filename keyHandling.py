@@ -64,7 +64,7 @@ def handlekeys(pad, myPad, stdscr, cursor, linelength, eol, tabsize, filename, k
 		if cursor.px + tabsize + linelength > pad.getmaxyx()[1] - 1:
 			pad.resize(pad.getmaxyx()[0], cursor.px + tabsize + linelength + 1)
 
-		pad.insstr(key_char) # Add input to the screen
+		pad.insstr(key_char, curses.color_pair(1)) # Add input to the screen
 
 		if key_char == "\t":
 			for x in range(0, tabsize):
