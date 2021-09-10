@@ -1,28 +1,29 @@
 
 red: 
-  - B80016
+  - "00FF00"
 blue:
-  - 0021FF
+  - "0021FF"
 orange: 
-  - E7DE00
+  - "E7DE00"
 green: 
-  - 00E738
+  - "00E738"
 yellow: 
-  - D7E700
+  - "D7E700"
 purple: 
-  - 7F00E7
+  - "7F00E7"
 cyan: 
-  - 00FFEA
-magenta: 
-  - E70080
+  - "00FFEA"
+magenta:
+  - "E70080"
 white: 
-  - FFFFFF
+  - "FFFFFF"
 black: 
   - "000000"
 
 foreground: 
-  - FFFFFF
+  - "FFFFFF"
 background: 
-  - 4E0053
+  - "4E0053"
 cursor: 
-  - FFFFFF
+  - "FFFFFF"
+

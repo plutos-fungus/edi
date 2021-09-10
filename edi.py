@@ -25,8 +25,6 @@ def main(stdscr):
     myPad = Pad()
     cursor = Cursor()
     curses.start_color()
-    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
     stdscr.refresh()
     tabsize = 4 # tab size used by curses
 
@@ -48,7 +46,6 @@ def main(stdscr):
     for x in range(8):
         curses.init_color(x, colors_list[x][0], colors_list[x][1], colors_list[x][2])
 
-    curses.init_color(curses.COLOR_WHITE, colors_list[7][0], colors_list[7][1], colors_list[7][2])
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
@@ -69,11 +66,7 @@ def main(stdscr):
             key = stdscr.get_wch()
         except curses.error:
             key = -1
-        #if key == 266:
-            #save_close(pad, pad_y, pad_x, filename)
         handlekeys(pad, myPad, stdscr, cursor, linelength, eol, tabsize, filename, key, opperators)
         
-
-
 if __name__ == '__main__':
     wrapper(main)

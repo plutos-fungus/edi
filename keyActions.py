@@ -15,7 +15,7 @@ def delete(pad, myPad, stdscr, cursor): # Doesn't work with the default GNOME te
 	return myPad.posx
 
 def back_delete(pad, cursor):
-	pad.delch(cursor.py, cursor.px) # Delete the character to the righ. This also
+	pad.delch(cursor.py, cursor.px) # Delete the character to the right. This also
 	# moves the other characters on that line one closer to the cursor
 
 def left(pad, myPad, stdscr, cursor):
@@ -37,6 +37,7 @@ def right(pad, myPad, stdscr, cursor):
 	pad.move(cursor.py, newx)
 	pad.refresh(myPad.posy, myPad.posx, 0, 0, stdscr.getmaxyx()[0] - 1, stdscr.getmaxyx()[1] - 1)
 	return myPad.posx
+
 
 def up(pad, myPad, stdscr, cursor):
 	if cursor.py != 0:
@@ -70,6 +71,7 @@ def enter(pad, myPad, stdscr, cursor, eol):
 	return myPad.posy
 
 def syntaxHighlight(pad, myPad, stdscr, cursor, operators): 
+	# Getting operators 
 	if operators[0] != None:
 		if cursor.py == pad.getmaxyx()[0] - 1:
 			pad.resize(pad.getmaxyx()[0] + 1, pad.getmaxyx()[1])
@@ -91,7 +93,7 @@ def syntaxHighlight(pad, myPad, stdscr, cursor, operators):
 				for xpos in oposes:
 					pad.move(cursor.py, xpos)
 					pad.addstr(o, curses.color_pair(2))
-		# regex time! 
+		# functions. Should be done as part of language config file somehow 
 		pad.move(cursor.py, 0)
 		funcs = re.findall("\w*\(.*\)", currline)
 		for f in funcs:
@@ -136,5 +138,4 @@ def fileSyntax(pad, operators):
 					if foundx != -1: 
 						pad.move(y, foundx) 
 						pad.addstr(i, curses.color_pair(3))
-
 	pad.move(0, 0)
