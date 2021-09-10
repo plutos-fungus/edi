@@ -10,4 +10,4 @@ VI_mode:
   - n
 
 theme:
-  - toast.yml
+  - theme.yml

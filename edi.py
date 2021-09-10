@@ -42,9 +42,9 @@ def main(stdscr):
 #============================ Color setup ==================================#
     myColors = Themestuff()  
     colors_list = myColors.parseColors()
-
-    for x in range(8):
-        curses.init_color(x, colors_list[x][0], colors_list[x][1], colors_list[x][2])
+    if colors_list != None:
+        for x in range(8):
+            curses.init_color(x, colors_list[x][0], colors_list[x][1], colors_list[x][2])
 
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)

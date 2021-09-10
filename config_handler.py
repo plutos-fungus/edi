@@ -1,18 +1,16 @@
 import sys
 import re
 import yaml
+import os 
 from globalDefinitions import *
 from yaml.loader import SafeLoader
 # Handle the config-file
 # Please
-fileendings = 'configs/fileendings/files.yml'
-theme = []
-themes_files = 'configs/theme/'
+fileendings = os.path.expanduser('~/.config/edi/files.yml')
 #========================= Viables and paths =========================#
 def getSyntax(filename):
-    global theme
-    config_file = 'configs/config.yml'
-    language_files = 'configs/languages/'
+    config_file = os.path.expanduser('~/.config/edi/config.yml')
+    language_files = os.path.expanduser('~/.config/edi/languages/')
     VI_mode_on = False
     language = ""
     ending = ""
@@ -22,11 +20,9 @@ def getSyntax(filename):
         with open(config_file, 'r') as config:
             config = yaml.load(config, Loader=SafeLoader)
             VI_mode = config['VI_mode']
-            theme = config['theme']
     except FileNotFoundError: 
         VI_mode = "n"
         language = []
-        theme.append(None) # TODO: if no theme is set, don't run Themestuff.
 
 
     actualopperators = []
@@ -35,7 +31,7 @@ def getSyntax(filename):
         language = "python"
 
     try: 
-        with open(language_files + language + ".yml", 'r') as language_config:
+        with open(os.path.expanduser("~/.config/edi/languages/python.yml"), 'r') as language_config: # ~/.config/edi/files.ymlpython
             language_config = yaml.load(language_config, Loader=SafeLoader)
             opperators = language_config['opperators']
             #print("=== Language ===")
@@ -52,9 +48,9 @@ def getSyntax(filename):
         return opperators
 
 def Themestuff():
-    global theme
-    myColors = Themergb(themes_files, theme)
+    myColors = Themergb(os.path.expanduser('~/.config/edi/theme.yml')) # The argument passed into theme rgb is the path to the theme file. Should be ~/.config/edi/theme.yml once everything has been adjusted
     return myColors
+    # configs/theme/theme.yml
 
 def Endings():
     with open(fileendings, 'r') as endings:
@@ -78,3 +74,4 @@ def vimode():
             elif i == "n" and i == "y":
                 VI_mode_on = False
                 break
+Themestuff()
